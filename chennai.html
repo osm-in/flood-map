@@ -75,7 +75,7 @@
       <div class="space-bottom1">
         <ul>
           <li>
-            <a href="#" class="truncate strong bloxk small ">
+            <a href="#" class="truncate strong bloxk small " onclick='mapCartodem();'>
           ISRO Cartodem
         </a>
           </li>
@@ -97,7 +97,7 @@
         </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small ">
+            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("water");'>
           Waterway Network
         </a>
           </li>
@@ -120,19 +120,20 @@
 
     // Define camera locations
     var mapLocation = {
-      reset: {
-        center: [80.24, 13.06],
-        zoom: 11,
-        pitch: 20,
-        bearing: -40
+      "reset": {
+        "center": [80.24, 13.06],
+        "zoom": 11,
+        "pitch": 20,
+        "bearing": -40
       },
-      pallikaranai: {
-        center: [80.22, 12.926],
-        zoom: 13.8,
-        pitch: 45,
-        bearing: 90
+      "pallikaranai": {
+        "center": [80.22, 12.926],
+        "zoom": 13.8,
+        "pitch": 45,
+        "bearing": 90
       }
     };
+
 
     // Simple map
     mapboxgl.accessToken = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
@@ -198,7 +199,49 @@
       fly(mapLocation.reset);
     };
 
-    // Fly to and set pitch
+    // Layer functions
+    // Toggle cartodem layer
+    function mapCartodem() {
+      if (map.getPaintProperty('chennai-cartodem', 'raster-opacity'))
+        map.setPaintProperty('chennai-cartodem', 'raster-opacity', 0);
+      else
+        map.setPaintProperty('chennai-cartodem', 'raster-opacity', 1);
+    };
+
+    // Highlight a layer collection
+
+    var mapLayerCollection = {
+      "water": [
+        {
+          "id": "water",
+          "type": "fill",
+        },
+        {
+          "id": "waterway-river-canal",
+          "type": "line",
+        },
+        {
+          "id": "waterway-small",
+          "type": "line",
+        }
+      ]
+    };
+
+    function mapHighlight(collectionName) {
+
+      for (var i = 0; i < mapLayerCollection[collectionName].length; i ++){
+        // For fills
+        if (mapLayerCollection[collectionName][i].type == 'fill')
+          map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-color', 'red');
+        // For lines
+        if (mapLayerCollection[collectionName][i].type == 'line')
+          map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-color', 'red');
+      }
+
+    };
+
+    //Map functions
+    // Set pitch and fly to location
     function fly(options) {
       map.setPitch(options.pitch);
       map.flyTo(options);

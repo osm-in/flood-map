@@ -118,12 +118,23 @@
           Road Flyovers & Bridges
         </a>
           </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("railway-stations","red");'>
+          Railway Stations
+        </a>
+          </li>
         </ul>
       </div>
+
+
 
       <h5>Data Sources</h5>
       <ul>
         <li><a href="http://bhuvan.nrsc.gov.in/data/download/index.php">ISRO/CartoDEM v3 elevation data</a></li>
+      </ul>
+
+      <h5>Live query</h5>
+      <ul id='map-query'>
       </ul>
 
     </div>
@@ -231,6 +242,10 @@
         "id": "building",
         "type": "fill",
       }],
+      "railway-stations": [{
+        "id": "rail-label",
+        "type": "symbol",
+      }],
       "road-subways": [{
         "id": "tunnel-motorway",
         "type": "line",
@@ -322,6 +337,27 @@
       map.setPitch(mapLocation[location].pitch);
       map.flyTo(mapLocation[location]);
     }
+
+    // Live map query
+    map.on('mousemove', function (e) {
+        map.featuresAt(e.point, {radius: 4}, function (err, features) {
+            if (err) throw err;
+            var featuresList = '';
+            var feature = '';
+            for ( var i = 0; i < 1; i++){
+              if(features[i].properties.class || features[i].properties.name){
+                featuresList += '<li>';
+                if(features[i].properties.class)
+                featuresList += features[i].properties.class;
+                if(features[i].properties.name)
+                featuresList += ': '+features[i].properties.name;
+                featuresList += '</li>';
+              }
+            }
+            $('#map-query').html(featuresList);
+        });
+    });
+
   </script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>

@@ -25,8 +25,8 @@
     }
 
     h1 {
-   text-shadow: -1px 1px 1px rgba(255, 255, 255, 0.5);
-}
+      text-shadow: -1px 1px 1px rgba(255, 255, 255, 0.5);
+    }
 
     #map {
       position: absolute;
@@ -55,21 +55,21 @@
 
     <h1>Chennai Flood Map</h1>
 
-    <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapReset();'>
+    <div class='col3 contain dark fill-navy pad1'>
+      <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapReset();'>
   (reset)
 </a></h5>
 
-    <div class="space-bottom1">
-      <ul>
-        <li>
-          <a href="#" class="truncate strong bloxk small" onclick='mapPallikaranai();'>
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapPallikaranai();'>
         The death of the Pallikaranai Marsh
       </a>
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+      </div>
 
-    <div class='col3 contain dark fill-navy pad1'>
       <h5>Layers</h5>
 
       <div class="space-bottom1">
@@ -190,11 +190,11 @@
     });
 
     // Location functions
-    function mapPallikaranai(){
+    function mapPallikaranai() {
       fly(mapLocation.pallikaranai);
     };
 
-    function mapReset(){
+    function mapReset() {
       fly(mapLocation.reset);
     };
 
@@ -203,7 +203,6 @@
       map.setPitch(options.pitch);
       map.flyTo(options);
     }
-
   </script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>

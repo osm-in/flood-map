@@ -104,8 +104,8 @@
       <div class="space-bottom1">
         <ul>
           <li>
-            <a href="#" class="truncate strong bloxk small ">
-          Road Subways
+            <a href="#" class="truncate strong bloxk small " onclick='mapHighlight("road-subways","red");'>
+          Road Subways & Tunnels
         </a>
           </li>
           <li>
@@ -228,13 +228,22 @@
         "id": "chennai-cartodem",
         "type": "raster",
       }],
-      "roads": [{
-        "id": "road-main",
-        "type": "line",
-      }],
       "buildings": [{
         "id": "building",
         "type": "fill",
+      }],
+      "road-subways": [{
+        "id": "tunnel-motorway",
+        "type": "line",
+      }, {
+        "id": "tunnel-trunk",
+        "type": "line",
+      }, {
+        "id": "tunnel-main",
+        "type": "line",
+      }, {
+        "id": "tunnel-street",
+        "type": "line",
       }]
     };
 
@@ -263,11 +272,11 @@
         // Loop through collection and store defaults before changing them
         for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
           // For fills
-          if (mapLayerCollection[collectionName][i].type == 'fill') {
+          if (mapLayerCollection[collectionName][i].type == 'fill' && mapLayerCollection[collectionName][i]["default-fill-color"]) {
             map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-color', mapLayerCollection[collectionName][i]["default-fill-color"]);
           }
           // For lines
-          if (mapLayerCollection[collectionName][i].type == 'line') {
+          if (mapLayerCollection[collectionName][i].type == 'line' && mapLayerCollection[collectionName][i]["default-line-color"]) {
             map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-color', mapLayerCollection[collectionName][i]["default-line-color"]);
           }
         }

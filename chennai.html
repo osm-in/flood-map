@@ -2,72 +2,211 @@
 <html class="no-js" lang="">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Flood Maps</title>
-    <meta name="description" content="">
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Flood Maps</title>
+  <meta name="description" content="">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-    <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
-    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    <style>
-      html{
-        background-image: none;
-        background-repeat: no-repeat;
-      }
-      body{
-        background: none;
-      }
-      #map { position:absolute; top:0; bottom:0; width:100%; }
-      #map-panel {position: relative; z-index: 100;}
-    </style>
+  <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+  <style>
+    html {
+      background-image: none;
+      background-repeat: no-repeat;
+    }
+
+    body {
+      background: none;
+    }
+
+    h1 {
+   text-shadow: -1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    #map-panel {
+      position: relative;
+      z-index: 100;
+    }
+  </style>
 </head>
 
 <body>
 
-    <!--[if lt IE 8]>
+  <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-    <!-- Content -->
-    <div id='map'></div>
+  <!-- Content -->
+  <div id='map'></div>
 
-    <div id='map-panel' class='limiter'>
+  <div id='map-panel' class='limiter'>
 
-      <h1>Chennai Flood Map</h1>
+    <h1>Chennai Flood Map</h1>
 
-      <div class='col3 contain'>
-        <h3>Sidebar</h3>
+    <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapReset();'>
+  (reset)
+</a></h5>
+
+    <div class="space-bottom1">
+      <ul>
+        <li>
+          <a href="#" class="truncate strong bloxk small" onclick='mapPallikaranai();'>
+        The death of the Pallikaranai Marsh
+      </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class='col3 contain dark fill-navy pad1'>
+      <h5>Layers</h5>
+
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a href="#" class="truncate strong bloxk small ">
+          ISRO Cartodem
+        </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small ">
+          Water flow
+        </a>
+          </li>
+        </ul>
       </div>
+
+      <h5>Highlight</h5>
+
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a href="#" class="truncate strong bloxk small ">
+          Road Subways
+        </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small ">
+          Waterway Network
+        </a>
+          </li>
+        </ul>
+      </div>
+
+      <h5>Sources</h5>
+      <ul>
+        <li>ISRO/CartoDEM3 elevation data</li>
+        <li>NASA/SRTM elevation data</li>
+      </ul>
 
     </div>
 
-    <div class='limiter'>
-      <div class='col12 clearfix'>
-        <h5>Sources</h5>
-        <p>A project to visualize flood information using open data and interactive maps <a class='icon github button short' href='http://github.com/mapbox'>Fork me</a></p>
-      </div>
-    </div>
+  </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>
-        window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script>
+    window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
 
-        mapboxgl.accessToken = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
-var map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
-    center: [80.24, 13.06], // starting position
-    zoom: 9 // starting zoom
-});
+    // Define camera locations
+    var mapLocation = {
+      reset: {
+        center: [80.24, 13.06],
+        zoom: 11,
+        pitch: 20,
+        bearing: -40
+      },
+      pallikaranai: {
+        center: [80.22, 12.926],
+        zoom: 13.8,
+        pitch: 45,
+        bearing: 90
+      }
+    };
 
-    </script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
+    // Simple map
+    mapboxgl.accessToken = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
+    });
+    fly(mapLocation.reset);
+
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.Navigation());
+
+    // Add a vector layer
+    map.on('style.load', function() {
+      map.addSource('terrain-data', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-terrain-v2'
+      });
+      map.addLayer({
+        "id": "terrain-data",
+        "type": "line",
+        "source": "terrain-data",
+        "source-layer": "contour",
+        "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        "paint": {
+          "line-color": "#ff69b4",
+          "line-width": 1
+        }
+      });
+    });
+
+    // Add a tile layer
+    map.on('style.load', function() {
+      map.addSource('terrain-data', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-terrain-v2'
+      });
+      map.addLayer({
+        "id": "terrain-data",
+        "type": "line",
+        "source": "terrain-data",
+        "source-layer": "contour",
+        "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        "paint": {
+          "line-color": "#ff69b4",
+          "line-width": 1
+        }
+      });
+    });
+
+    // Location functions
+    function mapPallikaranai(){
+      fly(mapLocation.pallikaranai);
+    };
+
+    function mapReset(){
+      fly(mapLocation.reset);
+    };
+
+    // Fly to and set pitch
+    function fly(options) {
+      map.setPitch(options.pitch);
+      map.flyTo(options);
+    }
+
+  </script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
 </body>
 
 </html>

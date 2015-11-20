@@ -2,49 +2,67 @@
 <html class="no-js" lang="">
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Map!</title>
-  <meta name="description" content="">
-  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Flood Maps</title>
+    <meta name="description" content="">
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-  <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
-  <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
-  <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/main.css">
-  <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
+    <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <style>
+      html{
+        background-image: url('img/background.jpeg');
+        background-repeat: no-repeat;
+      }
+      body{
+        background: none;
+      }
+    </style>
 </head>
 
 <body>
 
-  <!--[if lt IE 8]>
+    <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-  <!-- Content -->
+    <!-- Content -->
+    <div class='limiter'>
 
-  <div class='col12 clearfix'>
-    <div class='col4 pad2' id="panel">
-      <h1 class='fancy'>Maps</h1>
-      <h1>App Name</h1>
-      <h3>A small excerpt</h3>
-      <p>There's a saying amongst the officers: If a job's worth doing, it's worth doing well. If it's not worth doing, give it to <a href='http://en.wikipedia.org/wiki/Arnold_Rimmer'>Rimmer</a>. He aches for responsibility, yet constantly fails the Astro-navigation
-        exam. Astoundingly zealous, possibly mad; probably has more teeth than brain cells. Promotion prospects: comical.</p>
+      <h1 class='fancy'>Flood Maps</h1>
 
-<p><a class='icon github button' href='http://github.com/mapbox'>Fork me on GitHub</a></p>
+      <div class='col12 clearfix space-bottom4'>
 
+        <div class='col6 pad2 prose dark fill-navy keyline-right'>
+            <h2>Chennai</h3>
+            <p>The south Indian city of Chennai faces constant flooding every November during the northeast monsoon.</p>
+            <a class='button stroke' href='chennai.html'>View Map</a>
+        </div>
+
+        <div class='col6 pad2 prose dark fill-navy'>
+          <h2>Bengaluru</h3>
+          <p>The south Indian city of Chennai faces constant flooding every November during the northeast monsoon.</p>
+          <a class='button stroke' href='http://github.com/mapbox'>View Map</a>
+        </div>
+
+      </div>
+
+      <div class='col12 clearfix'>
+        <p>A project to visualize flood information using open data and interactive maps <a class='icon github button short' href='http://github.com/mapbox'>Fork me</a></p>
+      </div>
     </div>
-    <div class='margin0 col7 pad2' id='map'></div>
-  </div>
 
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script>
-    window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
-  </script>
-  <script src="js/plugins.js"></script>
-  <script src="js/main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
+    </script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

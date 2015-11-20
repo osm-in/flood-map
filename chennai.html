@@ -56,15 +56,25 @@
     <h1>Chennai Flood Map</h1>
 
     <div class='col3 contain dark fill-navy pad1'>
-      <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapReset();'>
+      <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
   (reset)
 </a></h5>
 
       <div class="space-bottom1">
         <ul>
           <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapPallikaranai();'>
-        The death of the Pallikaranai Marsh
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("cooum-river");'>
+        Cooum River
+      </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("adyar-river");'>
+        Adyar River
+      </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("pallikaranai");'>
+        Pallikaranai Marsh
       </a>
           </li>
         </ul>
@@ -75,19 +85,21 @@
       <div class="space-bottom1">
         <ul>
           <li>
-            <a href="#" class="truncate strong bloxk small " onclick='mapCartodem();'>
+            <a href="#" class="truncate strong bloxk small " onclick='mapToggle("cartodem");'>
           ISRO Cartodem
         </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small ">
-          Water flow
+            <a href="#" class="truncate strong bloxk small " onclick='mapToggle("roads");'>
+          Roads
         </a>
           </li>
         </ul>
       </div>
 
-      <h5>Highlight</h5>
+      <h5>Highlight <a href="#" class="truncate strong bloxk small" onclick='mapHighlightReset();'>
+  (reset)
+</a></h5>
 
       <div class="space-bottom1">
         <ul>
@@ -97,7 +109,12 @@
         </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("water");'>
+            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("road-bridges","red");'>
+          Road Flyovers & Bridges
+        </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("water","red");'>
           Waterway Network
         </a>
           </li>
@@ -118,7 +135,7 @@
   <script>
     window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
 
-    // Define camera locations
+    // Define map locations
     var mapLocation = {
       "reset": {
         "center": [80.24, 13.06],
@@ -131,6 +148,18 @@
         "zoom": 13.8,
         "pitch": 45,
         "bearing": 90
+      },
+      "adyar-river": {
+        "center": [80.261, 13.014],
+        "zoom": 13.8,
+        "pitch": 60,
+        "bearing": -64
+      },
+      "cooum-river": {
+        "center": [80.281, 13.074],
+        "zoom": 13.8,
+        "pitch": 60,
+        "bearing": -64
       }
     };
 
@@ -141,7 +170,7 @@
       container: 'map', // container id
       style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
     });
-    fly(mapLocation.reset);
+    mapLocate("reset");
 
     // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.Navigation());
@@ -163,88 +192,127 @@
         },
         "paint": {
           "line-color": "#ff69b4",
+          "line-opacity": "0.3",
           "line-width": 1
         }
       });
     });
 
-    // Add a tile layer
-    map.on('style.load', function() {
-      map.addSource('terrain-data', {
-        type: 'vector',
-        url: 'mapbox://mapbox.mapbox-terrain-v2'
-      });
-      map.addLayer({
-        "id": "terrain-data",
+    // Styling a layer collection
+    // Define a layer collection
+    var mapLayerCollection = {
+      "water": [{
+        "id": "water",
+        "type": "fill",
+      }, {
+        "id": "waterway-river-canal",
         "type": "line",
-        "source": "terrain-data",
-        "source-layer": "contour",
-        "layout": {
-          "line-join": "round",
-          "line-cap": "round"
-        },
-        "paint": {
-          "line-color": "#ff69b4",
-          "line-width": 1
-        }
-      });
-    });
-
-    // Location functions
-    function mapPallikaranai() {
-      fly(mapLocation.pallikaranai);
-    };
-
-    function mapReset() {
-      fly(mapLocation.reset);
-    };
-
-    // Layer functions
-    // Toggle cartodem layer
-    function mapCartodem() {
-      if (map.getPaintProperty('chennai-cartodem', 'raster-opacity'))
-        map.setPaintProperty('chennai-cartodem', 'raster-opacity', 0);
-      else
-        map.setPaintProperty('chennai-cartodem', 'raster-opacity', 1);
+      }, {
+        "id": "waterway-small",
+        "type": "line",
+      }],
+      "road-bridges": [{
+        "id": "bridge-main",
+        "type": "line",
+      }, {
+        "id": "bridge-street",
+        "type": "line",
+      }, {
+        "id": "bridge-trunk",
+        "type": "line",
+      }, {
+        "id": "bridge-motorway",
+        "type": "line",
+      }],
+      "cartodem": [{
+        "id": "chennai-cartodem",
+        "type": "raster",
+      }],
+      "roads": [{
+        "id": "road-main",
+        "type": "line",
+      }],
+      "buildings": [{
+        "id": "building",
+        "type": "fill",
+      }]
     };
 
     // Highlight a layer collection
+    function mapHighlight(collectionName, color) {
 
-    var mapLayerCollection = {
-      "water": [
-        {
-          "id": "water",
-          "type": "fill",
-        },
-        {
-          "id": "waterway-river-canal",
-          "type": "line",
-        },
-        {
-          "id": "waterway-small",
-          "type": "line",
-        }
-      ]
-    };
-
-    function mapHighlight(collectionName) {
-
-      for (var i = 0; i < mapLayerCollection[collectionName].length; i ++){
+      // Loop through collection and store defaults before changing them
+      for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
         // For fills
-        if (mapLayerCollection[collectionName][i].type == 'fill')
-          map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-color', 'red');
+        if (mapLayerCollection[collectionName][i].type == 'fill') {
+          mapLayerCollection[collectionName][i]["default-fill-color"] = map.getPaintProperty(mapLayerCollection[collectionName][i].id, "fill-color");
+          map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-color', color);
+        }
         // For lines
         if (mapLayerCollection[collectionName][i].type == 'line')
-          map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-color', 'red');
+          mapLayerCollection[collectionName][i]["default-line-color"] = map.getPaintProperty(mapLayerCollection[collectionName][i].id, "line-color");
+        map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-color', color);
       }
 
     };
 
-    //Map functions
+    // Reset style of a collection to default
+    function mapHighlightReset() {
+
+      for (var collectionName in mapLayerCollection) {
+        // Loop through collection and store defaults before changing them
+        for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
+          // For fills
+          if (mapLayerCollection[collectionName][i].type == 'fill') {
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-color', mapLayerCollection[collectionName][i]["default-fill-color"]);
+          }
+          // For lines
+          if (mapLayerCollection[collectionName][i].type == 'line') {
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-color', mapLayerCollection[collectionName][i]["default-line-color"]);
+          }
+        }
+      }
+
+    };
+
+    // Toggle a layer collection
+    function mapToggle(collectionName) {
+
+      // Loop through collection and toggle visibility
+      for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
+        // For raster
+        if (mapLayerCollection[collectionName][i].type == 'raster') {
+          if (map.getPaintProperty(mapLayerCollection[collectionName][i].id, "raster-opacity"))
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'raster-opacity', 0);
+          else
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'raster-opacity', 1);
+        }
+
+        // For fills
+        if (mapLayerCollection[collectionName][i].type == 'fill') {
+          if (map.getPaintProperty(mapLayerCollection[collectionName][i].id, "fill-opacity"))
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-opacity', 0);
+          else
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-opacity', 1);
+        }
+
+        // For line
+        if (mapLayerCollection[collectionName][i].type == 'line') {
+          if (map.getPaintProperty(mapLayerCollection[collectionName][i].id, "line-opacity"))
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-opacity', 0);
+          else
+            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-opacity', 1);
+        }
+
+      }
+
+    };
+
+    //Location functions
     // Set pitch and fly to location
-    function fly(options) {
-      map.setPitch(options.pitch);
-      map.flyTo(options);
+    function mapLocate(location) {
+      map.setPitch(mapLocation[location].pitch);
+      map.flyTo(mapLocation[location]);
     }
   </script>
   <script src="js/plugins.js"></script>

@@ -93,7 +93,7 @@
         <ul>
           <li>
             <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small " onclick='mapToggle("cartodem");'>
-          ISRO Cartodem
+          Low lying areas
         </a>
           </li>
           <li>
@@ -261,6 +261,8 @@
       }]
     };
 
+    var defaultStyle = {};
+
     // Highlight a layer collection
     function mapHighlight(collectionName, color) {
 
@@ -269,16 +271,21 @@
 
         var obj = mapLayerCollection[collectionName][i];
 
-        // For fills
-        if (map.getLayer(obj.id).type == 'fill') {
-          obj["default-fill-color"] = map.getPaintProperty(obj.id, "fill-color");
-          map.setPaintProperty(obj.id, 'fill-color', color);
-        }
-        // For lines
-        if (map.getLayer(obj.id).type == 'line') {
-          obj["default-line-color"] = map.getPaintProperty(obj.id, "line-color");
-          map.setPaintProperty(obj.id, 'line-color', color);
-        }
+        // Choose an appropriate property to change
+        if (map.getLayer(obj.id).type == 'raster')
+          prop = 'raster-opacity';
+        if (map.getLayer(obj.id).type == 'fill')
+          prop = 'fill-color';
+        if (map.getLayer(obj.id).type == 'line')
+          prop = 'line-color';
+        if (map.getLayer(obj.id).type == 'circle')
+          prop = 'circle-color';
+
+        var propObj = {};
+        propObj[prop] = map.getPaintProperty(obj.id, prop);
+
+        defaultStyle[obj.id] = propObj;
+        map.setPaintProperty(obj.id, prop, color);
 
       }
 
@@ -292,13 +299,22 @@
         for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
 
           var obj = mapLayerCollection[collectionName][i];
+          var prop;
 
-          // For fills
-          if (map.getLayer(obj.id).type == 'fill' && obj["default-fill-color"])
-            map.setPaintProperty(obj.id, 'fill-color', obj["default-fill-color"]);
-          // For lines
-          if (map.getLayer(obj.id).type == 'line' && obj["default-line-color"])
-            map.setPaintProperty(obj.id, 'line-color', obj["default-line-color"]);
+          // Choose an appropriate property to change
+          if (map.getLayer(obj.id).type == 'raster')
+            prop = 'raster-opacity';
+          if (map.getLayer(obj.id).type == 'fill')
+            prop = 'fill-color';
+          if (map.getLayer(obj.id).type == 'line')
+            prop = 'line-color';
+          if (map.getLayer(obj.id).type == 'circle')
+            prop = 'circle-color';
+
+          // Revert to default style if known
+          if (defaultStyle[obj.id][prop])
+            map.setPaintProperty(obj.id, prop, defaultStyle[obj.id][prop]);
+
         }
       }
 
@@ -311,6 +327,7 @@
       for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
 
         var obj = mapLayerCollection[collectionName][i];
+        var prop;
 
         // Choose an appropriate property to change
         if (map.getLayer(obj.id).type == 'raster')
@@ -355,10 +372,12 @@
           $('#map-query').attr('value', featuresList);
         });
       });
+
+      // Popups on click
       map.on('click', function(e) {
         map.featuresAt(e.point, {
-          radius: 8,
-          layer: 'chennai-relief-camps',
+          radius: 10,
+          layer: ['chennai-relief-camps', 'chennai-relief-camps-22nov'],
           includeGeometry: true
         }, function(err, features) {
           console.log('features here', features);

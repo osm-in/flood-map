@@ -220,45 +220,12 @@
 
     // Define a layer collection for easy styling
     var mapLayerCollection = {
-      "water": [{
-        "id": "water"
-      }, {
-        "id": "waterway-river-canal"
-      }, {
-        "id": "waterway-small"
-      }],
-      "road-bridges": [{
-        "id": "bridge-main"
-      }, {
-        "id": "bridge-street"
-      }, {
-        "id": "bridge-trunk"
-      }, {
-        "id": "bridge-motorway"
-      }],
-      "cartodem": [{
-        "id": "chennai-cartodem"
-      }],
-      "buildings": [{
-        "id": "building"
-      }],
-      "railway-stations": [{
-        "id": "rail-label"
-      }],
-      "road-subways": [{
-        "id": "tunnel-motorway"
-      }, {
-        "id": "tunnel-trunk"
-      }, {
-        "id": "tunnel-main"
-      }, {
-        "id": "tunnel-street"
-      }],
-      "relief-camps": [{
-        "id": "chennai-relief-camps"
-      }, {
-        "id": "chennai-relief-camps-22nov"
-      }]
+      "water": ["water", "waterway-river-canal", "waterway-small"],
+      "road-bridges": ["bridge-main","bridge-street","bridge-trunk","bridge-motorway"],
+      "cartodem": ["chennai-cartodem"],
+      "buildings": ["building"],
+      "road-subways": ["tunnel-motorway","tunnel-trunk","tunnel-main","tunnel-street"],
+      "relief-camps": ["chennai-relief-camps","chennai-relief-camps-22nov"]
     };
 
     var defaultStyle = {};
@@ -271,21 +238,23 @@
 
         var obj = mapLayerCollection[collectionName][i];
 
+        console.log(obj);
+
         // Choose an appropriate property to change
-        if (map.getLayer(obj.id).type == 'raster')
+        if (map.getLayer(obj).type == 'raster')
           prop = 'raster-opacity';
-        if (map.getLayer(obj.id).type == 'fill')
+        if (map.getLayer(obj).type == 'fill')
           prop = 'fill-color';
-        if (map.getLayer(obj.id).type == 'line')
+        if (map.getLayer(obj).type == 'line')
           prop = 'line-color';
-        if (map.getLayer(obj.id).type == 'circle')
+        if (map.getLayer(obj).type == 'circle')
           prop = 'circle-color';
 
         var propObj = {};
-        propObj[prop] = map.getPaintProperty(obj.id, prop);
+        propObj[prop] = map.getPaintProperty(obj, prop);
 
-        defaultStyle[obj.id] = propObj;
-        map.setPaintProperty(obj.id, prop, color);
+        defaultStyle[obj] = propObj;
+        map.setPaintProperty(obj, prop, color);
 
       }
 
@@ -302,18 +271,18 @@
           var prop;
 
           // Choose an appropriate property to change
-          if (map.getLayer(obj.id).type == 'raster')
+          if (map.getLayer(obj).type == 'raster')
             prop = 'raster-opacity';
-          if (map.getLayer(obj.id).type == 'fill')
+          if (map.getLayer(obj).type == 'fill')
             prop = 'fill-color';
-          if (map.getLayer(obj.id).type == 'line')
+          if (map.getLayer(obj).type == 'line')
             prop = 'line-color';
-          if (map.getLayer(obj.id).type == 'circle')
+          if (map.getLayer(obj).type == 'circle')
             prop = 'circle-color';
 
           // Revert to default style if known
-          if (defaultStyle[obj.id][prop])
-            map.setPaintProperty(obj.id, prop, defaultStyle[obj.id][prop]);
+          if (defaultStyle[obj][prop])
+            map.setPaintProperty(obj, prop, defaultStyle[obj][prop]);
 
         }
       }
@@ -330,16 +299,16 @@
         var prop;
 
         // Choose an appropriate property to change
-        if (map.getLayer(obj.id).type == 'raster')
+        if (map.getLayer(obj).type == 'raster')
           prop = 'raster-opacity';
-        if (map.getLayer(obj.id).type == 'fill')
+        if (map.getLayer(obj).type == 'fill')
           prop = 'fill-opacity';
-        if (map.getLayer(obj.id).type == 'line')
+        if (map.getLayer(obj).type == 'line')
           prop = 'line-opacity';
-        if (map.getLayer(obj.id).type == 'circle')
+        if (map.getLayer(obj).type == 'circle')
           prop = 'circle-opacity';
 
-        map.setPaintProperty(obj.id, prop, !map.getPaintProperty(obj.id, prop));
+        map.setPaintProperty(obj, prop, !map.getPaintProperty(obj, prop));
 
       }
 

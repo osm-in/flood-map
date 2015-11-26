@@ -290,7 +290,100 @@
           $(this).prepend('<div class="map-legend-circle" style="background:' + array2rgb(color) + '"></div>');
         } catch (e) {};
       });
+
+    var roadLayers = [
+        'road',
+        'road-main',
+        'road-construction',
+        'road-rail',
+        'road-motorway',
+        'road-oneway-arrows-trunk',
+        'road-trunk',
+        'road-oneway-arrows-other',
+        'road-street',
+        'road-service-driveway',
+        'road-path',
+        'road-label-large',
+        'road-label-medium',
+        'road-label-small',
+        'tunnel-motorway',
+        'tunnel-trunk',
+        'tunnel-main',
+        'tunnel-street',
+        'bridge-main',
+        'bridge-street',
+        'bridge-trunk',
+        'bridge-motorway',
+        'street_limited',
+        'living_street'
+    ];
+
+    // var myRequest = new XMLHttpRequest();
+
+    // myRequest.open("GET","https://api.github.com/gists/c5b071a574e89638779f",false);
+    // myRequest.send(null);
+
+    // // var chennaiGeoJSON = JSON.stringify(JSON.parse(myRequest.responseText).files["small-chennai.geojson"].content);
+    // var chennaiGeoJSON = JSON.parse(myRequest.responseText).files["chennai.geojson"].content;
+    // var addedRoads = [];
+    // var deletedRoads = [];
+    // var gistRoads = [];
+
+    var selectedRoadsGeoJSON = {};
+    selectedRoadsGeoJSON['type'] = 'FeatureCollection';
+    selectedRoadsGeoJSON['features'] = [];
+    var selectedRoadsSource = new mapboxgl.GeoJSONSource({'data': selectedRoadsGeoJSON});
+    map.addSource('selected-roads', selectedRoadsGeoJSON);
+    map.addLayer({
+        'id': 'selected-roads',
+        'type': 'line',
+        'source': 'selected-roads',
+        'paint': {
+            'line-color': '#ff69b4',
+            'line-width': 5
+        }
     });
+
+    map.on('click', function (e) {
+      map.featuresAt(e.point, {radius: 5, includeGeometry: true}, function (err, features) {
+          if (err) throw err;
+          for (var i = 0; i < features.length; i++) {
+            if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
+                features[i].geometry['type'] === 'MultiLineString')) {
+                console.log('i ' + JSON.stringify(features[i]));
+                var tempObj = {};
+                tempObj.type = features[i].type;
+                tempObj.geometry = features[i].geometry;
+                tempObj.properties = features[i].properties;
+                selectedRoadsGeoJSON['features'].push(tempObj);
+                break;
+            }
+
+          }
+          selectedRoadsSource.setData(selectedRoadsGeoJSON);
+      });
+    });
+
+    // Live map query
+    map.on('mousemove', function(e) {
+      map.featuresAt(e.point, {
+        radius: 4
+      }, function(err, features) {
+        if (err) throw err;
+        var featuresList = '';
+        var feature = '';
+        for (var i = 0; i < 1; i++) {
+          if (features[i].properties.class)
+            featuresList += features[i].properties.class + ' ';
+          if (features[i].properties.type)
+            featuresList += features[i].properties.type + ' ';
+          if (features[i].properties.name)
+            featuresList += ':' + features[i].properties.name;
+        }
+        $('#map-query').attr('value', featuresList);
+      });
+    });
+  });
   </script>
   <script src="js/plugins.js"></script>
 </body>

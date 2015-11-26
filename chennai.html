@@ -290,15 +290,13 @@
 
       for (var collectionName in mapLayerCollection) {
         // Loop through collection and and reset properties to stored defaults
-        for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
+        for (var i = 0, obj = mapLayerCollection[collectionName][i]; i < mapLayerCollection[collectionName].length; i++) {
           // For fills
-          if (mapLayerCollection[collectionName][i].type == 'fill' && mapLayerCollection[collectionName][i]["default-fill-color"]) {
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-color', mapLayerCollection[collectionName][i]["default-fill-color"]);
-          }
+          if (obj.type == 'fill' && obj["default-fill-color"])
+            map.setPaintProperty(obj.id, 'fill-color', obj["default-fill-color"]);
           // For lines
-          if (mapLayerCollection[collectionName][i].type == 'line' && mapLayerCollection[collectionName][i]["default-line-color"]) {
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-color', mapLayerCollection[collectionName][i]["default-line-color"]);
-          }
+          if (obj.type == 'line' && obj["default-line-color"])
+            map.setPaintProperty(obj.id, 'line-color', obj["default-line-color"]);
         }
       }
 

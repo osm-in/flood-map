@@ -355,6 +355,21 @@
           $('#map-query').attr('value', featuresList);
         });
       });
+      map.on('click', function(e) {
+        map.featuresAt(e.point, {
+          radius: 8,
+          layer: 'chennai-relief-camps',
+          includeGeometry: true
+        }, function(err, features) {
+          console.log('features here', features);
+          if (features.length > 0) {
+            var popup = new mapboxgl.Popup()
+              .setLngLat(features[0].geometry.coordinates)
+              .setText(features[0].properties.Name)
+              .addTo(map);
+          }
+        });
+      });
     });
   </script>
   <script src="js/plugins.js"></script>

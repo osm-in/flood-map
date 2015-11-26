@@ -214,56 +214,41 @@
       });
     });
 
-    // Styling a layer collection
-    // Define a layer collection
+    // Define a layer collection for easy styling
     var mapLayerCollection = {
       "water": [{
-        "id": "water",
-        "type": "fill",
+        "id": "water"
       }, {
-        "id": "waterway-river-canal",
-        "type": "line",
+        "id": "waterway-river-canal"
       }, {
-        "id": "waterway-small",
-        "type": "line",
+        "id": "waterway-small"
       }],
       "road-bridges": [{
-        "id": "bridge-main",
-        "type": "line",
+        "id": "bridge-main"
       }, {
-        "id": "bridge-street",
-        "type": "line",
+        "id": "bridge-street"
       }, {
-        "id": "bridge-trunk",
-        "type": "line",
+        "id": "bridge-trunk"
       }, {
-        "id": "bridge-motorway",
-        "type": "line",
+        "id": "bridge-motorway"
       }],
       "cartodem": [{
-        "id": "chennai-cartodem",
-        "type": "raster",
+        "id": "chennai-cartodem"
       }],
       "buildings": [{
-        "id": "building",
-        "type": "fill",
+        "id": "building"
       }],
       "railway-stations": [{
-        "id": "rail-label",
-        "type": "symbol",
+        "id": "rail-label"
       }],
       "road-subways": [{
-        "id": "tunnel-motorway",
-        "type": "line",
+        "id": "tunnel-motorway"
       }, {
-        "id": "tunnel-trunk",
-        "type": "line",
+        "id": "tunnel-trunk"
       }, {
-        "id": "tunnel-main",
-        "type": "line",
+        "id": "tunnel-main"
       }, {
-        "id": "tunnel-street",
-        "type": "line",
+        "id": "tunnel-street"
       }]
     };
 
@@ -272,15 +257,20 @@
 
       // Loop through collection and store defaults before changing them
       for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
+
+        var obj = mapLayerCollection[collectionName][i];
+
         // For fills
-        if (mapLayerCollection[collectionName][i].type == 'fill') {
-          mapLayerCollection[collectionName][i]["default-fill-color"] = map.getPaintProperty(mapLayerCollection[collectionName][i].id, "fill-color");
-          map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-color', color);
+        if (map.getLayer(obj.id).type == 'fill') {
+          obj["default-fill-color"] = map.getPaintProperty(obj.id, "fill-color");
+          map.setPaintProperty(obj.id, 'fill-color', color);
         }
         // For lines
-        if (mapLayerCollection[collectionName][i].type == 'line')
-          mapLayerCollection[collectionName][i]["default-line-color"] = map.getPaintProperty(mapLayerCollection[collectionName][i].id, "line-color");
-        map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-color', color);
+        if (map.getLayer(obj.id).type == 'line') {
+          obj["default-line-color"] = map.getPaintProperty(obj.id, "line-color");
+          map.setPaintProperty(obj.id, 'line-color', color);
+        }
+
       }
 
     };
@@ -290,12 +280,15 @@
 
       for (var collectionName in mapLayerCollection) {
         // Loop through collection and and reset properties to stored defaults
-        for (var i = 0, obj = mapLayerCollection[collectionName][i]; i < mapLayerCollection[collectionName].length; i++) {
+        for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
+
+          var obj = mapLayerCollection[collectionName][i];
+
           // For fills
-          if (obj.type == 'fill' && obj["default-fill-color"])
+          if (map.getLayer(obj.id).type == 'fill' && obj["default-fill-color"])
             map.setPaintProperty(obj.id, 'fill-color', obj["default-fill-color"]);
           // For lines
-          if (obj.type == 'line' && obj["default-line-color"])
+          if (map.getLayer(obj.id).type == 'line' && obj["default-line-color"])
             map.setPaintProperty(obj.id, 'line-color', obj["default-line-color"]);
         }
       }
@@ -306,14 +299,16 @@
     function mapToggle(collectionName) {
 
       // Loop through collection and toggle visibility
-      for (var i = 0, obj = mapLayerCollection[collectionName][i]; i < mapLayerCollection[collectionName].length; i++) {
+      for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
+
+        var obj = mapLayerCollection[collectionName][i];
 
         // Choose an appropriate property to change
-        if (obj.type == 'raster')
+        if (map.getLayer(obj.id).type == 'raster')
           prop = 'raster-opacity';
-        if (obj.type == 'fill')
+        if (map.getLayer(obj.id).type == 'fill')
           prop = 'fill-opacity';
-        if (obj.type == 'line')
+        if (map.getLayer(obj.id).type == 'line')
           prop = 'line-opacity';
 
         map.setPaintProperty(obj.id, prop, !map.getPaintProperty(obj.id, prop));
@@ -330,7 +325,7 @@
     }
 
     // Live map query
-    map.on('mousemove', function(e) {
+    map.on('mousemovex', function(e) {
       map.featuresAt(e.point, {
         radius: 4
       }, function(err, features) {

@@ -60,6 +60,7 @@
   <div id='map-panel' class='limiter'>
 
     <h1>Chennai Flood Map</h1>
+    <p>This map visualizes the low lying areas in the city (darker blue) which are plone to flooding during heavy rainfall.</p>
 
     <div class='col3 contain dark fill-navy pad1'>
       <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
@@ -288,7 +289,7 @@
     function mapHighlightReset() {
 
       for (var collectionName in mapLayerCollection) {
-        // Loop through collection and store defaults before changing them
+        // Loop through collection and and reset properties to stored defaults
         for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
           // For fills
           if (mapLayerCollection[collectionName][i].type == 'fill' && mapLayerCollection[collectionName][i]["default-fill-color"]) {
@@ -303,34 +304,21 @@
 
     };
 
-    // Toggle a layer collection
+    // Toggle visibility of a layer collection using opacity
     function mapToggle(collectionName) {
 
       // Loop through collection and toggle visibility
-      for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-        // For raster
-        if (mapLayerCollection[collectionName][i].type == 'raster') {
-          if (map.getPaintProperty(mapLayerCollection[collectionName][i].id, "raster-opacity"))
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'raster-opacity', 0);
-          else
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'raster-opacity', 1);
-        }
+      for (var i = 0, obj = mapLayerCollection[collectionName][i]; i < mapLayerCollection[collectionName].length; i++) {
 
-        // For fills
-        if (mapLayerCollection[collectionName][i].type == 'fill') {
-          if (map.getPaintProperty(mapLayerCollection[collectionName][i].id, "fill-opacity"))
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-opacity', 0);
-          else
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'fill-opacity', 1);
-        }
+        // Choose an appropriate property to change
+        if (obj.type == 'raster')
+          prop = 'raster-opacity';
+        if (obj.type == 'fill')
+          prop = 'fill-opacity';
+        if (obj.type == 'line')
+          prop = 'line-opacity';
 
-        // For line
-        if (mapLayerCollection[collectionName][i].type == 'line') {
-          if (map.getPaintProperty(mapLayerCollection[collectionName][i].id, "line-opacity"))
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-opacity', 0);
-          else
-            map.setPaintProperty(mapLayerCollection[collectionName][i].id, 'line-opacity', 1);
-        }
+        map.setPaintProperty(obj.id, prop, !map.getPaintProperty(obj.id, prop));
 
       }
 

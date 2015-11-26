@@ -57,7 +57,7 @@
   <!-- Content -->
   <div id='map'></div>
 
-  <div id='map-panel' class='limiter'>
+  <div data-map='legend' id='map-panel' class='limiter'>
 
     <h1>Chennai Flood Map</h1>
     <p>This map visualizes the low lying areas in the city (darker blue) which are plone to flooding during heavy rainfall.</p>
@@ -92,15 +92,19 @@
       <div class="space-bottom1">
         <ul>
           <li>
-            <a href="#" class="truncate strong bloxk small " onclick='mapToggle("cartodem");'>
+            <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small " onclick='mapToggle("cartodem");'>
           ISRO Cartodem
         </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small " onclick='mapToggle("roads");'>
-          Roads
+            <a href="#" class="truncate strong bloxk small " onclick='mapToggle("relief-camps");'>
+          Flood relief camps
         </a>
           </li>
+          <ul>
+            <li data-map-layer='chennai-relief-camps'>Camps (All)</li>
+            <li data-map-layer='chennai-relief-camps-22nov'>Camps (Nov 22)</li>
+          </ul>
         </ul>
       </div>
 
@@ -249,6 +253,11 @@
         "id": "tunnel-main"
       }, {
         "id": "tunnel-street"
+      }],
+      "relief-camps": [{
+        "id": "chennai-relief-camps"
+      }, {
+        "id": "chennai-relief-camps-22nov"
       }]
     };
 
@@ -310,6 +319,8 @@
           prop = 'fill-opacity';
         if (map.getLayer(obj.id).type == 'line')
           prop = 'line-opacity';
+        if (map.getLayer(obj.id).type == 'circle')
+          prop = 'circle-opacity';
 
         map.setPaintProperty(obj.id, prop, !map.getPaintProperty(obj.id, prop));
 

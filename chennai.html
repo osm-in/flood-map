@@ -39,6 +39,10 @@
     #map-query {
       padding: 5px;
       height: 30px;
+      position: relative;
+      left: 120%;
+      background: rgba(0,0,0,0.4);
+      border-width: 0;
     }
 
     .map-legend-circle {
@@ -146,22 +150,14 @@
         </ul>
       </div>
 
-
-      <div class="space-bottom1">
-        <h5>Data Sources</h5>
-        <ul>
-          <li><a href="http://bhuvan.nrsc.gov.in/data/download/index.php">ISRO/CartoDEM v3 elevation data</a></li>
-        </ul>
-      </div>
-
-      <input id='map-query' type='text' value='' class='stretch' placeholder="Locate feature" />
+      <input id='map-query' type='text' value='' class='stretch' placeholder="Map feature" />
 
     </div>
 
   </div>
 
   <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
-    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Chennai was hit by the worst flood in 10 years</div>
+    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Poor infrastructure and unplanned development results in constant flooding in Chennai every monsoon. How bad is the situation? Nobody knows.</div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

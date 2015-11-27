@@ -292,20 +292,14 @@
       });
         
         var roadLayers = [
-            'road',
             'road-main',
             'road-construction',
             'road-rail',
             'road-motorway',
-            'road-oneway-arrows-trunk',
             'road-trunk',
-            'road-oneway-arrows-other',
             'road-street',
             'road-service-driveway',
             'road-path',
-            'road-label-large',
-            'road-label-medium',
-            'road-label-small',
             'tunnel-motorway',
             'tunnel-trunk',
             'tunnel-main',
@@ -314,8 +308,7 @@
             'bridge-street',
             'bridge-trunk',
             'bridge-motorway',
-            'street_limited',
-            'living_street'
+            'road-street_limited'
         ];
 
         var getRequest = new XMLHttpRequest();
@@ -351,7 +344,7 @@
         });
         
         map.on('click', function (e) {
-            map.featuresAt(e.point, {radius: 5, includeGeometry: true}, function (err, features) {
+            map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer:roadLayers}, function (err, features) {
                 if (err)
                     throw err;
                 for (var i = 0; i < features.length; i++) {

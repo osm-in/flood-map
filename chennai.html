@@ -164,7 +164,7 @@
   </div>
 
   <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
-      <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Chennai was hit by the worst flood in 10 years</div>
+    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Chennai was hit by the worst flood in 10 years</div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -191,14 +191,14 @@
         "zoom": 13.8,
         "pitch": 60,
         "bearing": -64,
-        "highlight":"water"
+        "highlight": "water"
       },
       "cooum-river": {
         "center": [80.281, 13.074],
         "zoom": 13.8,
         "pitch": 60,
         "bearing": -64,
-        "highlight":"water"
+        "highlight": "water"
       }
     };
 
@@ -245,7 +245,26 @@
       "buildings": ["building"],
       "road-subways": ["tunnel-motorway", "tunnel-trunk", "tunnel-main", "tunnel-street"],
       "relief-camps": ["chennai-relief-camps", "chennai-relief-camps-22nov"],
-      "chennai-water-logged-points": ["chennai-water-logged-points"]
+      "chennai-water-logged-points": ["chennai-water-logged-points"],
+      "road": [
+        'road-main',
+        'road-construction',
+        'road-rail',
+        'road-motorway',
+        'road-trunk',
+        'road-street',
+        'road-service-driveway',
+        'road-path',
+        'tunnel-motorway',
+        'tunnel-trunk',
+        'tunnel-main',
+        'tunnel-street',
+        'bridge-main',
+        'bridge-street',
+        'bridge-trunk',
+        'bridge-motorway',
+        'road-street_limited'
+      ]
     };
 
     map.on('style.load', function(e) {
@@ -311,123 +330,108 @@
         } catch (e) {};
       });
 
-        var roadLayers = [
-            'road-main',
-            'road-construction',
-            'road-rail',
-            'road-motorway',
-            'road-trunk',
-            'road-street',
-            'road-service-driveway',
-            'road-path',
-            'tunnel-motorway',
-            'tunnel-trunk',
-            'tunnel-main',
-            'tunnel-street',
-            'bridge-main',
-            'bridge-street',
-            'bridge-trunk',
-            'bridge-motorway',
-            'road-street_limited'
-        ];
+      var getRequest = new XMLHttpRequest();
 
-        var getRequest = new XMLHttpRequest();
+      getRequest.open('GET', 'http://at.therateof.com:12123/places.geojson', false);
+      getRequest.send(null);
 
-        getRequest.open('GET', 'http://at.therateof.com:12123/places.geojson', false);
-        getRequest.send(null);
+      // var chennaiGeoJSON = JSON.stringify(JSON.parse(getRequest.responseText).files["small-chennai.geojson"].content);
+      // alert(getRequest.responseText);
+      var chennaiGeoJSON = JSON.parse(getRequest.responseText);
 
-        // var chennaiGeoJSON = JSON.stringify(JSON.parse(getRequest.responseText).files["small-chennai.geojson"].content);
-        // alert(getRequest.responseText);
-        var chennaiGeoJSON = JSON.parse(getRequest.responseText);
+      var addedRoads = [];
+      var addedFeatures = [];
+      var deletedRoads = [];
+      var gistRoads = [];
 
-        var addedRoads = [];
-        var addedFeatures = [];
-        var deletedRoads = [];
-        var gistRoads = [];
-
-        for (var i = 0; i < chennaiGeoJSON.features.length; i++){
-            addedRoads.push(chennaiGeoJSON.features[i].properties.osm_id);
-            addedFeatures.push(chennaiGeoJSON.features[i]);
+      for (var i = 0; i < chennaiGeoJSON.features.length; i++) {
+        addedRoads.push(chennaiGeoJSON.features[i].properties.osm_id);
+        addedFeatures.push(chennaiGeoJSON.features[i]);
+      }
+      // var selectedRoadsGeoJSON = {};
+      // selectedRoadsGeoJSON["type"] = "FeatureCollection";
+      // selectedRoadsGeoJSON["features"] = [];
+      var selectedRoadsSource = new mapboxgl.GeoJSONSource({
+        'data': chennaiGeoJSON
+      });
+      map.addSource('selected-roads', selectedRoadsSource);
+      map.addLayer({
+        'id': 'selected-roads',
+        'type': 'line',
+        'source': 'selected-roads',
+        'paint': {
+          'line-color': '#ff69b4',
+          'line-width': 5
         }
-        // var selectedRoadsGeoJSON = {};
-        // selectedRoadsGeoJSON["type"] = "FeatureCollection";
-        // selectedRoadsGeoJSON["features"] = [];
-        var selectedRoadsSource = new mapboxgl.GeoJSONSource({'data': chennaiGeoJSON});
-        map.addSource('selected-roads', selectedRoadsSource);
-        map.addLayer({
-            'id': 'selected-roads',
-            'type': 'line',
-            'source': 'selected-roads',
-            'paint': {
-                'line-color': '#ff69b4',
-                'line-width': 5
+      });
+
+      map.on('click', function(e) {
+        map.featuresAt(e.point, {
+          radius: 5,
+          includeGeometry: true,
+          layer: mapLayerCollection["road"]
+        }, function(err, features) {
+          if (err)
+            throw err;
+          for (var i = 0; i < features.length; i++) {
+            var tempObj = {};
+            var index = addedRoads.indexOf(features[i].properties.osm_id);
+            var postRequest = new XMLHttpRequest();
+            var formData = new FormData();
+
+            if (index !== -1 && addedFeatures[index] && (addedFeatures[index].geometry.coordinates.length == features[i].geometry.coordinates.length)) {
+
+              console.log("unselect");
+
+              //create temp object
+              tempObj.geometry = features[i].geometry;
+              tempObj.properties = features[i].properties;
+              tempObj.properties["is_flooded"] = false;
+              console.log(JSON.stringify(tempObj));
+
+              //remove from all arrays
+              chennaiGeoJSON['features'].splice(index, 1);
+              addedRoads.splice(index, 1);
+              addedFeatures.splice(index, 1);
+
+              //Add tempObj to a formData to deal with "XMLHttpRequest"
+              formData.append("data", JSON.stringify(tempObj));
+
+              //push temp object to server
+              postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
+              postRequest.send(formData);
+              // alert(postRequest.status);
+              break;
+
+            } else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
+                features[i].geometry['type'] === 'MultiLineString')) {
+
+              console.log("select");
+
+              //create temp object
+              tempObj.geometry = features[i].geometry;
+              tempObj.properties = features[i].properties;
+              tempObj.properties["is_flooded"] = true;
+              console.log(JSON.stringify(tempObj));
+
+              //push to all arrays
+              addedFeatures.push(tempObj);
+              chennaiGeoJSON.features.push(tempObj);
+              addedRoads.push(features[i].properties.osm_id);
+
+              //Add tempObj to a formData to deal with "XMLHttpRequest"
+              formData.append("data", JSON.stringify(tempObj));
+
+              //push temp object to server
+              postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
+              postRequest.send(formData);
+              // alert(postRequest.status);
+              break;
             }
+          }
+          selectedRoadsSource.setData(chennaiGeoJSON);
         });
-
-        map.on('click', function (e) {
-            map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer:roadLayers}, function (err, features) {
-                if (err)
-                    throw err;
-                for (var i = 0; i < features.length; i++) {
-                    var tempObj = {};
-                    var index = addedRoads.indexOf(features[i].properties.osm_id);
-                    var postRequest = new XMLHttpRequest();
-                    var formData = new FormData();
-
-                    if (index !== -1 && addedFeatures[index] && (addedFeatures[index].geometry.coordinates.length == features[i].geometry.coordinates.length)) {
-
-                        console.log("unselect");
-
-                        //create temp object
-                        tempObj.geometry = features[i].geometry;
-                        tempObj.properties = features[i].properties;
-                        tempObj.properties["is_flooded"] = false;
-                        console.log(JSON.stringify(tempObj));
-
-                        //remove from all arrays
-                        chennaiGeoJSON['features'].splice(index, 1);
-                        addedRoads.splice(index, 1);
-                        addedFeatures.splice(index, 1);
-
-                        //Add tempObj to a formData to deal with "XMLHttpRequest"
-                        formData.append("data", JSON.stringify(tempObj));
-
-                        //push temp object to server
-                        postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
-                        postRequest.send(formData);
-                        // alert(postRequest.status);
-                        break;
-
-                    }
-                    else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
-                        features[i].geometry['type'] === 'MultiLineString')) {
-
-                        console.log("select");
-
-                        //create temp object
-                        tempObj.geometry = features[i].geometry;
-                        tempObj.properties = features[i].properties;
-                        tempObj.properties["is_flooded"] = true;
-                        console.log(JSON.stringify(tempObj));
-
-                        //push to all arrays
-                        addedFeatures.push(tempObj);
-                        chennaiGeoJSON.features.push(tempObj);
-                        addedRoads.push(features[i].properties.osm_id);
-
-                        //Add tempObj to a formData to deal with "XMLHttpRequest"
-                        formData.append("data", JSON.stringify(tempObj));
-
-                        //push temp object to server
-                        postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
-                        postRequest.send(formData);
-                        // alert(postRequest.status);
-                        break;
-                    }
-                }
-                selectedRoadsSource.setData(chennaiGeoJSON);
-            });
-        });
+      });
     });
   </script>
   <script src="js/plugins.js"></script>

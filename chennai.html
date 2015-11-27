@@ -64,8 +64,8 @@
 
   <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
 
-    <h1>Chennai Flood Map</h1>
-    <p>This map visualizes the low lying areas in the city (darker blue) which are prone to flooding during heavy rainfall.</p>
+    <h1>Chennai Flooded Street Map</h1>
+    <p>Mark your flooded street on the map. Streets get darker with more reports.</p>
 
     <div data-map='legend'>
       <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
@@ -360,11 +360,19 @@
         'type': 'line',
         'source': 'selected-roads',
         'paint': {
-          'line-color': '#ff69b4',
-          'line-width': 5
+          'line-color': '#ff6b44',
+          'line-width': 10,
+          'line-opacity': 0.3
         }
       });
 
+      // Road selection
+      $(window).keydown(function(e) {
+        if (e.ctrlKey)
+          console.log('Control Down');
+        ctrlKey = true;
+      });
+      // Toggle way selection on click
       map.on('click', function(e) {
         map.featuresAt(e.point, {
           radius: 5,
@@ -383,13 +391,13 @@
 
               console.log("unselect");
 
-              //create temp object
+              //Create temp object
               tempObj.geometry = features[i].geometry;
               tempObj.properties = features[i].properties;
               tempObj.properties["is_flooded"] = false;
               console.log(JSON.stringify(tempObj));
 
-              //remove from all arrays
+              //Remove from all arrays
               chennaiGeoJSON['features'].splice(index, 1);
               addedRoads.splice(index, 1);
               addedFeatures.splice(index, 1);
@@ -397,7 +405,7 @@
               //Add tempObj to a formData to deal with "XMLHttpRequest"
               formData.append("data", JSON.stringify(tempObj));
 
-              //push temp object to server
+              //Push temp object to server
               postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
               postRequest.send(formData);
               // alert(postRequest.status);
@@ -408,13 +416,13 @@
 
               console.log("select");
 
-              //create temp object
+              //Create temp object
               tempObj.geometry = features[i].geometry;
               tempObj.properties = features[i].properties;
               tempObj.properties["is_flooded"] = true;
               console.log(JSON.stringify(tempObj));
 
-              //push to all arrays
+              //Push to all arrays
               addedFeatures.push(tempObj);
               chennaiGeoJSON.features.push(tempObj);
               addedRoads.push(features[i].properties.osm_id);
@@ -422,10 +430,9 @@
               //Add tempObj to a formData to deal with "XMLHttpRequest"
               formData.append("data", JSON.stringify(tempObj));
 
-              //push temp object to server
+              //Push temp object to server
               postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
               postRequest.send(formData);
-              // alert(postRequest.status);
               break;
             }
           }

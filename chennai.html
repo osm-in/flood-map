@@ -26,7 +26,6 @@
 
     h1 {
       font-size: 3em;
-      text-shadow: -1px 1px 2px rgba(255, 255, 255, 0.5);
     }
 
     #map {
@@ -34,11 +33,6 @@
       top: 0;
       bottom: 0;
       width: 100%;
-    }
-
-    #map-legend {
-      position: relative;
-      z-index: 100;
     }
 
     #map-query {
@@ -68,12 +62,12 @@
   <!-- Content -->
   <div id='map'></div>
 
-  <div data-map='legend' id='map-legend' class='limiter'>
+  <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
 
     <h1>Chennai Flood Map</h1>
-    <p>This map visualizes the low lying areas in the city (darker blue) which are plone to flooding during heavy rainfall.</p>
+    <p>This map visualizes the low lying areas in the city (darker blue) which are prone to flooding during heavy rainfall.</p>
 
-    <div class='col3 contain dark fill-navy pad1'>
+    <div data-map='legend'>
       <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
   (reset)
 </a></h5>
@@ -162,6 +156,7 @@
     </div>
 
   </div>
+
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/mapbox-gl-js-common.js"></script>

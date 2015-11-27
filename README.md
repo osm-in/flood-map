@@ -1,5 +1,6 @@
 ## Flood Maps
 ![](https://cloud.githubusercontent.com/assets/126868/11440554/86851886-9529-11e5-9bf5-55abcc223057.gif)
+
 Interactive map web app to visualize and crowdsource flood related information using [OpenStreetMap](http://openstreetmap.in/#5/22.147/79.102) and [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/)
 
 ### Data Sources

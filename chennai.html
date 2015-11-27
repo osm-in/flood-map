@@ -26,7 +26,7 @@
 
     h1 {
       font-size: 3em;
-      margin-top:0;
+      margin:0;
     }
 
     #map {
@@ -69,9 +69,10 @@
 
   <div id='sidebar' class='pin-left col3 pad2 dark fill-navy scroll-styled'>
 
-    <h1>Chennai Flooded Street Map</h1>
+    <h1>Flooded Streets</h1>
+    <h2><a href='..'>சென்னை</a></h2>
     <img class="space-bottom1" src="https://cloud.githubusercontent.com/assets/126868/11440554/86851886-9529-11e5-9bf5-55abcc223057.gif">
-    <p>Report a flooded street by highlighting it on the map. This crowdsourced map and data is <a href="https://github.com/osm-in/flood-map">open</a>.</p>
+    <p>This is a crowdsourced effort to map inundated roads in Chennai. Report a flooded street by zooming into the map and clicking it. All the data is <a href="https://github.com/osm-in/flood-map">open</a>.</p>
 
     <div data-map='legend'>
 
@@ -102,7 +103,7 @@
         </ul>
       </div>
 
-      <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
+      <h5>Affected Areas <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
   (reset)
 </a></h5>
 
@@ -157,7 +158,7 @@
   <span id='map-query'></span>
 
   <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
-    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Poor infrastructure and unplanned development results in constant flooding in Chennai every monsoon. How bad is the situation? Nobody knows.</div>
+    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Poor infrastructure and unplanned development results in constant flooding in Chennai every monsoon. How bad is the situation? <a href="https://github.com/osm-in/flood-map">Nobody knows</a>.</div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

@@ -280,6 +280,15 @@
     };
 
     map.on('style.load', function(e) {
+      var chennaiGeoJSON;
+      // Select flooded roads
+      $.get('http://at.therateof.com:12123/places.geojson',function (data, status){
+        chennaiGeoJSON = JSON.parse(data);
+        playWithMap();
+      })
+      .fail(function(){
+        alert("Oops! Our server is out for a walk, try again after some time.");
+      });
 
       //Live query
       map.on('mousemove', function(e) {
@@ -331,106 +340,95 @@
         } catch (e) {};
       });
 
-      // Select flooded roads
-      var getRequest = new XMLHttpRequest();
+    function playWithMap(){
+        var addedRoads = [];
+        var addedFeatures = [];
+        var deletedRoads = [];
 
-      getRequest.open('GET', 'http://at.therateof.com:12123/places.geojson', false);
-      getRequest.send(null);
-
-      var chennaiGeoJSON = JSON.parse(getRequest.responseText);
-
-      var addedRoads = [];
-      var addedFeatures = [];
-      var deletedRoads = [];
-
-      for (var i = 0; i < chennaiGeoJSON.features.length; i++) {
-        addedRoads.push(chennaiGeoJSON.features[i].properties.osm_id);
-        addedFeatures.push(chennaiGeoJSON.features[i]);
-      }
-
-      var selectedRoadsSource = new mapboxgl.GeoJSONSource({
-        'data': chennaiGeoJSON
-      });
-      map.addSource('selected-roads', selectedRoadsSource);
-      map.addLayer({
-        'id': 'selected-roads',
-        'type': 'line',
-        'source': 'selected-roads',
-        'paint': {
-          'line-color': 'rgba(255,5,230,1)',
-          'line-width': 10,
-          'line-opacity': 0.3
+        for (var i = 0; i < chennaiGeoJSON.features.length; i++) {
+          addedRoads.push(chennaiGeoJSON.features[i].properties.osm_id);
+          addedFeatures.push(chennaiGeoJSON.features[i]);
         }
-      });
 
-      // Toggle way selection on click
-      map.on('click', function(e) {
-        if (map.getZoom() >= 15) {
-          map.featuresAt(e.point, {
-            radius: 5,
-            includeGeometry: true,
-            layer: mapLayerCollection["road"]
-          }, function(err, features) {
-            if (err)
-              throw err;
-            for (var i = 0; i < features.length; i++) {
-              var tempObj = {};
-              var index = addedRoads.indexOf(features[i].properties.osm_id);
-              var postRequest = new XMLHttpRequest();
-              var formData = new FormData();
+        var selectedRoadsSource = new mapboxgl.GeoJSONSource({
+          'data': chennaiGeoJSON
+        });
+        map.addSource('selected-roads', selectedRoadsSource);
+        map.addLayer({
+          'id': 'selected-roads',
+          'type': 'line',
+          'source': 'selected-roads',
+          'paint': {
+            'line-color': 'rgba(255,5,230,1)',
+            'line-width': 10,
+            'line-opacity': 0.3
+          }
+        });
 
-              if (index !== -1 && addedFeatures[index] && (addedFeatures[index].geometry.coordinates.length == features[i].geometry.coordinates.length)) {
+        // Toggle way selection on click
+        map.on('click', function(e) {
+          if (map.getZoom() >= 15) {
+            map.featuresAt(e.point, {
+              radius: 5,
+              includeGeometry: true,
+              layer: mapLayerCollection["road"]
+            }, function(err, features) {
+              if (err)
+                throw err;
+              for (var i = 0; i < features.length; i++) {
+                var tempObj = {};
+                var index = addedRoads.indexOf(features[i].properties.osm_id);
 
-                console.log("unselect");
+                if (index !== -1 && addedFeatures[index] && (addedFeatures[index].geometry.coordinates.length === features[i].geometry.coordinates.length)) {
 
-                //Create temp object
-                tempObj.geometry = features[i].geometry;
-                tempObj.properties = features[i].properties;
-                tempObj.properties["is_flooded"] = false;
-                console.log(JSON.stringify(tempObj));
+                  //Create temp object
+                  tempObj.geometry = features[i].geometry;
+                  tempObj.properties = features[i].properties;
+                  tempObj.properties["is_flooded"] = false;
 
-                //Remove from all arrays
-                chennaiGeoJSON['features'].splice(index, 1);
-                addedRoads.splice(index, 1);
-                addedFeatures.splice(index, 1);
+                  $.post("http://at.therateof.com:12123/save",{'data':JSON.stringify(tempObj)}, function (data, status){
 
-                //Add tempObj to a formData to deal with "XMLHttpRequest"
-                formData.append("data", JSON.stringify(tempObj));
+                  })
+                  .fail(function(){
+                      alert("Oops! Our server is out for a walk, try again after some time.");
+                  })
+                  .success(function(){
+                    //Remove from all arrays
+                      chennaiGeoJSON['features'].splice(index, 1);
+                      addedRoads.splice(index, 1);
+                      addedFeatures.splice(index, 1);
+                      selectedRoadsSource.setData(chennaiGeoJSON);
+                  });
+                  break;
 
-                //Push temp object to server
-                postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
-                postRequest.send(formData);
-                break;
+                } else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
+                    features[i].geometry['type'] === 'MultiLineString')) {
 
-              } else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
-                  features[i].geometry['type'] === 'MultiLineString')) {
+                  //Create temp object
+                  tempObj.geometry = features[i].geometry;
+                  tempObj.properties = features[i].properties;
+                  tempObj.properties["is_flooded"] = true;
 
-                console.log("select");
+                  $.post("http://at.therateof.com:12123/save",{'data':JSON.stringify(tempObj)}, function (data, status){
 
-                //Create temp object
-                tempObj.geometry = features[i].geometry;
-                tempObj.properties = features[i].properties;
-                tempObj.properties["is_flooded"] = true;
-                console.log(JSON.stringify(tempObj));
-
-                //Push to all arrays
-                addedFeatures.push(tempObj);
-                chennaiGeoJSON.features.push(tempObj);
-                addedRoads.push(features[i].properties.osm_id);
-
-                //Add tempObj to a formData to deal with "XMLHttpRequest"
-                formData.append("data", JSON.stringify(tempObj));
-
-                //Push temp object to server
-                postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
-                postRequest.send(formData);
-                break;
+                  })
+                  .fail(function(){
+                      alert("Oops! Our server is out for a walk, try again after some time.");
+                  })
+                  .success(function(){
+                      //Push to all arrays
+                      addedFeatures.push(tempObj);
+                      chennaiGeoJSON.features.push(tempObj);
+                      addedRoads.push(features[i].properties.osm_id);
+                      selectedRoadsSource.setData(chennaiGeoJSON);
+                  });
+                  break;
+                }
               }
-            }
-            selectedRoadsSource.setData(chennaiGeoJSON);
-          });
-        }
-      });
+            });
+          }
+        });
+      }
     });
 
     function array2rgb(color) {

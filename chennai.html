@@ -36,7 +36,7 @@
       width: 100%;
     }
 
-    #map-panel {
+    #map-legend {
       position: relative;
       z-index: 100;
     }
@@ -44,6 +44,17 @@
     #map-query {
       padding: 5px;
       height: 30px;
+    }
+
+    .map-legend-circle {
+      width: 10px;
+      height: 10px;
+      background: red;
+      -moz-border-radius: 50px;
+      -webkit-border-radius: 50px;
+      border-radius: 50px;
+      float: left;
+      margin: 5px 7px 0 0;
     }
   </style>
 </head>
@@ -57,7 +68,7 @@
   <!-- Content -->
   <div id='map'></div>
 
-  <div data-map='legend' id='map-panel' class='limiter'>
+  <div data-map='legend' id='map-legend' class='limiter'>
 
     <h1>Chennai Flood Map</h1>
     <p>This map visualizes the low lying areas in the city (darker blue) which are plone to flooding during heavy rainfall.</p>
@@ -92,19 +103,25 @@
       <div class="space-bottom1">
         <ul>
           <li>
-            <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small " onclick='mapToggle("cartodem");'>
+            <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small" onclick='mapToggle(this);'>
           Low lying areas
         </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small " onclick='mapToggle("relief-camps");'>
+            <a data-map-layer='relief-camps' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
           Flood relief camps
         </a>
           </li>
           <ul>
-            <li data-map-layer='chennai-relief-camps'>Camps (All)</li>
-            <li data-map-layer='chennai-relief-camps-22nov'>Camps (Nov 22)</li>
+            <li data-map-layer='chennai-relief-camps' class="truncate bloxk small">Camps (All)</li>
+            <li data-map-layer='chennai-relief-camps-22nov' class="truncate bloxk small">Camps (Nov 22)</li>
+            <li data-map-layer='chennai-water-logged-points' class="truncate bloxk small">Water Logged Points (Nov 22)</li>
           </ul>
+          <li>
+            <a data-map-layer='chennai-water-logged-points' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
+          Water logged points
+        </a>
+          </li>
         </ul>
       </div>
 
@@ -115,23 +132,18 @@
       <div class="space-bottom1">
         <ul>
           <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("water","red");'>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='water' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
           Waterbodies
         </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small " onclick='mapHighlight("road-subways","red");'>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='road-subways' class="truncate strong bloxk small " onclick='mapHighlight(this);'>
           Road Subways & Tunnels
         </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("road-bridges","red");'>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='road-bridges' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
           Road Flyovers & Bridges
-        </a>
-          </li>
-          <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapHighlight("railway-stations","red");'>
-          Railway Stations
         </a>
           </li>
         </ul>
@@ -152,6 +164,7 @@
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="js/mapbox-gl-js-common.js"></script>
   <script>
     window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
 
@@ -221,126 +234,14 @@
     // Define a layer collection for easy styling
     var mapLayerCollection = {
       "water": ["water", "waterway-river-canal", "waterway-small"],
-      "road-bridges": ["bridge-main","bridge-street","bridge-trunk","bridge-motorway"],
+      "road-bridges": ["bridge-main", "bridge-street", "bridge-trunk", "bridge-motorway"],
       "cartodem": ["chennai-cartodem"],
       "buildings": ["building"],
-      "road-subways": ["tunnel-motorway","tunnel-trunk","tunnel-main","tunnel-street"],
-      "relief-camps": ["chennai-relief-camps","chennai-relief-camps-22nov"]
+      "road-subways": ["tunnel-motorway", "tunnel-trunk", "tunnel-main", "tunnel-street"],
+      "relief-camps": ["chennai-relief-camps", "chennai-relief-camps-22nov"]
     };
 
-    var defaultStyle = {};
-
-    // Highlight a layer collection
-    function mapHighlight(collectionName, color) {
-
-      // Loop through collection and store defaults before changing them
-      for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-        var obj = mapLayerCollection[collectionName][i];
-
-        console.log(obj);
-
-        // Choose an appropriate property to change
-        if (map.getLayer(obj).type == 'raster')
-          prop = 'raster-opacity';
-        if (map.getLayer(obj).type == 'fill')
-          prop = 'fill-color';
-        if (map.getLayer(obj).type == 'line')
-          prop = 'line-color';
-        if (map.getLayer(obj).type == 'circle')
-          prop = 'circle-color';
-
-        var propObj = {};
-        propObj[prop] = map.getPaintProperty(obj, prop);
-
-        defaultStyle[obj] = propObj;
-        map.setPaintProperty(obj, prop, color);
-
-      }
-
-    };
-
-    // Reset style of a collection to default
-    function mapHighlightReset() {
-
-      for (var collectionName in mapLayerCollection) {
-        // Loop through collection and and reset properties to stored defaults
-        for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-          var obj = mapLayerCollection[collectionName][i];
-          var prop;
-
-          // Choose an appropriate property to change
-          if (map.getLayer(obj).type == 'raster')
-            prop = 'raster-opacity';
-          if (map.getLayer(obj).type == 'fill')
-            prop = 'fill-color';
-          if (map.getLayer(obj).type == 'line')
-            prop = 'line-color';
-          if (map.getLayer(obj).type == 'circle')
-            prop = 'circle-color';
-
-          // Revert to default style if known
-          if (defaultStyle[obj][prop])
-            map.setPaintProperty(obj, prop, defaultStyle[obj][prop]);
-
-        }
-      }
-
-    };
-
-    // Toggle visibility of a layer collection using opacity
-    function mapToggle(collectionName) {
-
-      // Loop through collection and toggle visibility
-      for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-        var obj = mapLayerCollection[collectionName][i];
-        var prop;
-
-        // Choose an appropriate property to change
-        if (map.getLayer(obj).type == 'raster')
-          prop = 'raster-opacity';
-        if (map.getLayer(obj).type == 'fill')
-          prop = 'fill-opacity';
-        if (map.getLayer(obj).type == 'line')
-          prop = 'line-opacity';
-        if (map.getLayer(obj).type == 'circle')
-          prop = 'circle-opacity';
-
-        map.setPaintProperty(obj, prop, !map.getPaintProperty(obj, prop));
-
-      }
-
-    };
-
-    //Location functions
-    // Set pitch and fly to location
-    function mapLocate(location) {
-      map.setPitch(mapLocation[location].pitch);
-      map.flyTo(mapLocation[location]);
-    }
-
-    // Live map query
     map.on('style.load', function(e) {
-      map.on('mousemove', function(e) {
-        map.featuresAt(e.point, {
-          radius: 4
-        }, function(err, features) {
-          if (err) throw err;
-          var featuresList = '';
-          var feature = '';
-          for (var i = 0; i < 1; i++) {
-            if (features[i].properties.class)
-              featuresList += features[i].properties.class + ' ';
-            if (features[i].properties.type)
-              featuresList += features[i].properties.type + ' ';
-            if (features[i].properties.name)
-              featuresList += ':' + features[i].properties.name;
-          }
-          $('#map-query').attr('value', featuresList);
-        });
-      });
 
       // Popups on click
       map.on('click', function(e) {
@@ -351,17 +252,40 @@
         }, function(err, features) {
           console.log('features here', features);
           if (features.length > 0) {
+            var popupHTML = "<h5>" + features[0].properties.Name + "</h5><p>" + $("[data-map-layer=" + features[0].layer.id + "]").html() + "</p>"
             var popup = new mapboxgl.Popup()
               .setLngLat(features[0].geometry.coordinates)
-              .setText(features[0].properties.Name)
+              .setHTML(popupHTML)
               .addTo(map);
           }
         });
       });
     });
+
+    function array2rgb(color) {
+      // Combine and return the values
+      return 'rgba(' + color.map(function(x) {
+        return x * 255;
+      }).join() + ')';
+    }
+
+    map.on('style.load', function(e) {
+
+      // Update map legend from styles
+      $("[data-map-layer]").each(function(e) {
+
+        // Get the color of the feature from the map
+        var obj = $(this).attr('data-map-layer');
+
+        try {
+          var color = map.getPaintProperty(obj, 'circle-color');
+          // Set the legend color
+          $(this).prepend('<div class="map-legend-circle" style="background:' + array2rgb(color) + '"></div>');
+        } catch (e) {};
+      });
+    });
   </script>
   <script src="js/plugins.js"></script>
-  <script src="js/main.js"></script>
 </body>
 
 </html>

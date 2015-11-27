@@ -371,6 +371,7 @@
       });
       // Toggle way selection on click
       map.on('click', function(e) {
+        if (map.getZoom() >= 15) {
         map.featuresAt(e.point, {
           radius: 5,
           includeGeometry: true,
@@ -434,6 +435,7 @@
           }
           selectedRoadsSource.setData(chennaiGeoJSON);
         });
+      }
       });
     });
 

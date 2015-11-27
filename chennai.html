@@ -343,7 +343,6 @@
       var addedRoads = [];
       var addedFeatures = [];
       var deletedRoads = [];
-      var gistRoads = [];
 
       for (var i = 0; i < chennaiGeoJSON.features.length; i++) {
         addedRoads.push(chennaiGeoJSON.features[i].properties.osm_id);
@@ -367,12 +366,6 @@
         }
       });
 
-      // Road selection
-      $(window).keydown(function(e) {
-        if (e.ctrlKey)
-          console.log('Control Down');
-        ctrlKey = true;
-      });
       // Toggle way selection on click
       map.on('click', function(e) {
         map.featuresAt(e.point, {

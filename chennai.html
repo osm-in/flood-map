@@ -26,6 +26,7 @@
 
     h1 {
       font-size: 3em;
+      margin-top:0;
     }
 
     #map {
@@ -65,9 +66,38 @@
   <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
 
     <h1>Chennai Flooded Street Map</h1>
-    <p>Mark your flooded street on the map. Streets get darker with more reports.</p>
+    <img class="space-bottom1" src="https://cloud.githubusercontent.com/assets/126868/11440554/86851886-9529-11e5-9bf5-55abcc223057.gif">
+    <p>Report a flooded street by clicking on it. This crowdsourced map and data is <a href="#">open</a>.</p>
 
     <div data-map='legend'>
+
+      <h5>Flood Layers</h5>
+
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small" onclick='mapToggle(this);'>
+          Terrain
+        </a>
+          </li>
+          <li>
+            <a data-map-layer='chennai-relief-camps-22nov' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
+          Flood relief camps (Open on Nov 22)
+        </a>
+          </li>
+          <li>
+            <a data-map-layer='chennai-relief-camps' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
+          Flood relief camps (Including closed)
+        </a>
+          </li>
+          <li>
+            <a data-map-layer='chennai-water-logged-points' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
+          Water logged points
+        </a>
+          </li>
+        </ul>
+      </div>
+
       <h5>Locations <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
   (reset)
 </a></h5>
@@ -75,45 +105,19 @@
       <div class="space-bottom1">
         <ul>
           <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("cooum-river");'>
-        Cooum River
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("aminjikarai");'>
+        Aminjikarai
       </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("adyar-river");'>
-        Adyar River
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("st-thomas-mt");'>
+        St Thomas Mt
       </a>
           </li>
           <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("pallikaranai");'>
-        Pallikaranai Marsh
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("tambaram");'>
+        Tambaram
       </a>
-          </li>
-        </ul>
-      </div>
-
-      <h5>Layers</h5>
-
-      <div class="space-bottom1">
-        <ul>
-          <li>
-            <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small" onclick='mapToggle(this);'>
-          Low lying areas
-        </a>
-          </li>
-          <li>
-            <a data-map-layer='relief-camps' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
-          Flood relief camps
-        </a>
-          </li>
-          <ul>
-            <li data-map-layer='chennai-relief-camps' class="truncate bloxk small">Camps (All)</li>
-            <li data-map-layer='chennai-relief-camps-22nov' class="truncate bloxk small">Camps (Nov 22)</li>
-          </ul>
-          <li>
-            <a data-map-layer='chennai-water-logged-points' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
-          Water logged points
-        </a>
           </li>
         </ul>
       </div>
@@ -147,13 +151,6 @@
         <h5>Data Sources</h5>
         <ul>
           <li><a href="http://bhuvan.nrsc.gov.in/data/download/index.php">ISRO/CartoDEM v3 elevation data</a></li>
-        </ul>
-      </div>
-
-      <div class="space-bottom1">
-        <h5>Mark flooded Roads</h5>
-        <ul>
-          <li><a href="#" onclick="uploadToGist">Select flooded roads. Click the road again to unselect.</a></li>
         </ul>
       </div>
 
@@ -197,8 +194,25 @@
         "center": [80.281, 13.074],
         "zoom": 13.8,
         "pitch": 60,
-        "bearing": -64,
-        "highlight": "water"
+        "bearing": -64
+      },
+      "tambaram": {
+        "center": [80.09, 12.9],
+        "zoom": 13.8,
+        "pitch": 80,
+        "bearing": -10
+      },
+      "aminjikarai": {
+        "center": [80.21, 13.07],
+        "zoom": 13.8,
+        "pitch": 80,
+        "bearing": -10
+      },
+      "st-thomas-mt": {
+        "center": [80.19, 13.01],
+        "zoom": 13.8,
+        "pitch": 80,
+        "bearing": -10
       }
     };
 
@@ -244,7 +258,8 @@
       "cartodem": ["chennai-cartodem"],
       "buildings": ["building"],
       "road-subways": ["tunnel-motorway", "tunnel-trunk", "tunnel-main", "tunnel-street"],
-      "relief-camps": ["chennai-relief-camps", "chennai-relief-camps-22nov"],
+      "chennai-relief-camps": ["chennai-relief-camps"],
+      "chennai-relief-camps-22nov": ["chennai-relief-camps-22nov"],
       "chennai-water-logged-points": ["chennai-water-logged-points"],
       "road": [
         'road-main',
@@ -306,16 +321,6 @@
           }
         });
       });
-    });
-
-    function array2rgb(color) {
-      // Combine and return the values
-      return 'rgba(' + color.map(function(x) {
-        return x * 255;
-      }).join() + ')';
-    }
-
-    map.on('style.load', function(e) {
 
       // Update map legend from styles
       $("[data-map-layer]").each(function(e) {
@@ -330,6 +335,7 @@
         } catch (e) {};
       });
 
+      // Select flooded roads
       var getRequest = new XMLHttpRequest();
 
       getRequest.open('GET', 'http://at.therateof.com:12123/places.geojson', false);
@@ -360,7 +366,7 @@
         'type': 'line',
         'source': 'selected-roads',
         'paint': {
-          'line-color': '#ff6b44',
+          'line-color': 'rgba(255,5,230,1)',
           'line-width': 10,
           'line-opacity': 0.3
         }
@@ -440,8 +446,14 @@
         });
       });
     });
+
+    function array2rgb(color) {
+      // Combine and return the values
+      return 'rgba(' + color.map(function(x) {
+        return x * 255;
+      }).join() + ')';
+    }
   </script>
-  <script src="js/plugins.js"></script>
 </body>
 
 </html>

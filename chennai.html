@@ -38,11 +38,11 @@
 
     #map-query {
       padding: 5px;
-      height: 30px;
-      position: relative;
-      left: 120%;
+      position: absolute;
+      left: 20%;
+      bottom: 1em;
       background: rgba(0,0,0,0.4);
-      border-width: 0;
+      color: #aaa;
     }
 
     .map-legend-circle {
@@ -71,7 +71,7 @@
 
     <h1>Chennai Flooded Street Map</h1>
     <img class="space-bottom1" src="https://cloud.githubusercontent.com/assets/126868/11440554/86851886-9529-11e5-9bf5-55abcc223057.gif">
-    <p>Report a flooded street by highlighting it on the map. This crowdsourced map and data is <a href="#">open</a>.</p>
+    <p>Report a flooded street by highlighting it on the map. This crowdsourced map and data is <a href="https://github.com/osm-in/flood-map">open</a>.</p>
 
     <div data-map='legend'>
 
@@ -150,11 +150,11 @@
         </ul>
       </div>
 
-      <input id='map-query' type='text' value='' class='stretch' placeholder="Map feature" />
-
     </div>
 
   </div>
+
+  <span id='map-query'></span>
 
   <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
     <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Poor infrastructure and unplanned development results in constant flooding in Chennai every monsoon. How bad is the situation? Nobody knows.</div>
@@ -287,7 +287,6 @@
         }, function(err, features) {
           if (err) throw err;
           var featuresList = '';
-          var feature = '';
           for (var i = 0; i < 1; i++) {
             if (features[i].properties.class)
               featuresList += features[i].properties.class + ' ';
@@ -296,7 +295,7 @@
             if (features[i].properties.name)
               featuresList += ':' + features[i].properties.name;
           }
-          $('#map-query').attr('value', featuresList);
+          $('#map-query').html(featuresList);
         });
       });
 

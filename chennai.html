@@ -313,12 +313,13 @@
 
         var getRequest = new XMLHttpRequest();
 
-        getRequest.open('GET', 'https://api.github.com/gists/c5b071a574e89638779f', false);
+        getRequest.open('GET', 'http://at.therateof.com:12123/places.geojson', false);
         getRequest.send(null);
 
         // var chennaiGeoJSON = JSON.stringify(JSON.parse(getRequest.responseText).files["small-chennai.geojson"].content);
-        var chennaiGeoJSON = JSON.parse(getRequest.responseText).files["chennai.geojson"].content;
-        chennaiGeoJSON = JSON.parse(chennaiGeoJSON);
+        // alert(getRequest.responseText);
+        var chennaiGeoJSON = JSON.parse(getRequest.responseText);
+
         var addedRoads = [];
         var addedFeatures = [];
         var deletedRoads = [];

@@ -380,46 +380,46 @@
 
                 if (index !== -1 && addedFeatures[index] && (addedFeatures[index].geometry.coordinates.length === features[i].geometry.coordinates.length)) {
 
-                  console.log("unselect");
-
                   //Create temp object
                   tempObj.geometry = features[i].geometry;
                   tempObj.properties = features[i].properties;
                   tempObj.properties["is_flooded"] = false;
-                  console.log(JSON.stringify(tempObj));
 
                   $.post("http://at.therateof.com:12123/save",{'data':JSON.stringify(tempObj)}, function (data, status){
-                      //Remove from all arrays
+
+                  })
+                  .fail(function(){
+                      alert("Oops! Our server is out for a walk, try again after some time.");
+                  })
+                  .success(function(){
+                    //Remove from all arrays
                       chennaiGeoJSON['features'].splice(index, 1);
                       addedRoads.splice(index, 1);
                       addedFeatures.splice(index, 1);
                       selectedRoadsSource.setData(chennaiGeoJSON);
-                  })
-                  .fail(function(){
-                      alert("Oops! Our server is out for a walk, try again after some time.");
                   });
                   break;
 
                 } else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
                     features[i].geometry['type'] === 'MultiLineString')) {
 
-                  console.log("select");
-
                   //Create temp object
                   tempObj.geometry = features[i].geometry;
                   tempObj.properties = features[i].properties;
                   tempObj.properties["is_flooded"] = true;
-                  console.log(JSON.stringify(tempObj));
 
                   $.post("http://at.therateof.com:12123/save",{'data':JSON.stringify(tempObj)}, function (data, status){
+
+                  })
+                  .fail(function(){
+                      alert("Oops! Our server is out for a walk, try again after some time.");
+                  })
+                  .success(function(){
                       //Push to all arrays
                       addedFeatures.push(tempObj);
                       chennaiGeoJSON.features.push(tempObj);
                       addedRoads.push(features[i].properties.osm_id);
                       selectedRoadsSource.setData(chennaiGeoJSON);
-                  })
-                  .fail(function(){
-                      alert("Oops! Our server is out for a walk, try again after some time.");
                   });
                   break;
                 }

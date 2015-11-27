@@ -109,7 +109,6 @@
           <ul>
             <li data-map-layer='chennai-relief-camps' class="truncate bloxk small">Camps (All)</li>
             <li data-map-layer='chennai-relief-camps-22nov' class="truncate bloxk small">Camps (Nov 22)</li>
-            <li data-map-layer='chennai-water-logged-points' class="truncate bloxk small">Water Logged Points (Nov 22)</li>
           </ul>
           <li>
             <a data-map-layer='chennai-water-logged-points' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
@@ -245,7 +244,8 @@
       "cartodem": ["chennai-cartodem"],
       "buildings": ["building"],
       "road-subways": ["tunnel-motorway", "tunnel-trunk", "tunnel-main", "tunnel-street"],
-      "relief-camps": ["chennai-relief-camps", "chennai-relief-camps-22nov"]
+      "relief-camps": ["chennai-relief-camps", "chennai-relief-camps-22nov"],
+      "chennai-water-logged-points": ["chennai-water-logged-points"]
     };
 
     map.on('style.load', function(e) {
@@ -310,7 +310,7 @@
           $(this).prepend('<div class="map-legend-circle" style="background:' + array2rgb(color) + '"></div>');
         } catch (e) {};
       });
-        
+
         var roadLayers = [
             'road-main',
             'road-construction',
@@ -363,7 +363,7 @@
                 'line-width': 5
             }
         });
-        
+
         map.on('click', function (e) {
             map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer:roadLayers}, function (err, features) {
                 if (err)

@@ -34,9 +34,7 @@ function mapHighlight(item) {
 };
 
 // Reset style of a collection to default
-function mapHighlightReset(item) {
-
-  var collectionName = $(item).attr('data-map-layer');
+function mapHighlightReset() {
 
   for (var collectionName in mapLayerCollection) {
     // Loop through collection and and reset properties to stored defaults
@@ -46,8 +44,6 @@ function mapHighlightReset(item) {
       var prop;
 
       // Choose an appropriate property to change
-      if (map.getLayer(obj).type == 'raster')
-        prop = 'raster-opacity';
       if (map.getLayer(obj).type == 'fill')
         prop = 'fill-color';
       if (map.getLayer(obj).type == 'line')
@@ -56,8 +52,11 @@ function mapHighlightReset(item) {
         prop = 'circle-color';
 
       // Revert to default style if known
+      try{
       if (defaultStyle[obj][prop])
         map.setPaintProperty(obj, prop, defaultStyle[obj][prop]);
+      }
+      catch(e){}
 
     }
   }

@@ -349,25 +349,59 @@
                 if (err)
                     throw err;
                 for (var i = 0; i < features.length; i++) {
-
+                    var tempObj = {};
                     var index = addedRoads.indexOf(features[i].properties.osm_id);
+                    var postRequest = new XMLHttpRequest();
+                    var formData = new FormData();
+
                     if (index !== -1 && addedFeatures[index] && (addedFeatures[index].geometry.coordinates.length == features[i].geometry.coordinates.length)) {
+
                         console.log("unselect");
+
+                        //create temp object
+                        tempObj.geometry = features[i].geometry;
+                        tempObj.properties = features[i].properties;
+                        tempObj.properties["is_flooded"] = false;
+                        console.log(JSON.stringify(tempObj));
+
+                        //remove from all arrays
                         chennaiGeoJSON['features'].splice(index, 1);
                         addedRoads.splice(index, 1);
                         addedFeatures.splice(index, 1);
+
+                        //Add tempObj to a formData to deal with "XMLHttpRequest"
+                        formData.append("data", JSON.stringify(tempObj));
+
+                        //push temp object to server
+                        postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
+                        postRequest.send(formData);
+                        // alert(postRequest.status);
                         break;
+
                     }
                     else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
                         features[i].geometry['type'] === 'MultiLineString')) {
+
                         console.log("select");
-                        var tempObj = {};
+
+                        //create temp object
                         tempObj.geometry = features[i].geometry;
                         tempObj.properties = features[i].properties;
+                        tempObj.properties["is_flooded"] = true;
+                        console.log(JSON.stringify(tempObj));
+
+                        //push to all arrays
                         addedFeatures.push(tempObj);
-                        //POST
                         chennaiGeoJSON.features.push(tempObj);
                         addedRoads.push(features[i].properties.osm_id);
+
+                        //Add tempObj to a formData to deal with "XMLHttpRequest"
+                        formData.append("data", JSON.stringify(tempObj));
+
+                        //push temp object to server
+                        postRequest.open('POST', 'http://at.therateof.com:12123/save', false);
+                        postRequest.send(formData);
+                        // alert(postRequest.status);
                         break;
                     }
                 }

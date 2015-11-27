@@ -99,26 +99,5 @@ function mapToggle(item) {
 function mapLocate(location) {
   map.setPitch(mapLocation[location].pitch);
   map.flyTo(mapLocation[location]);
+  if(location == "reset"){}
 }
-
-// Live map query
-map.on('style.load', function(e) {
-  map.on('mousemove', function(e) {
-    map.featuresAt(e.point, {
-      radius: 4
-    }, function(err, features) {
-      if (err) throw err;
-      var featuresList = '';
-      var feature = '';
-      for (var i = 0; i < 1; i++) {
-        if (features[i].properties.class)
-          featuresList += features[i].properties.class + ' ';
-        if (features[i].properties.type)
-          featuresList += features[i].properties.type + ' ';
-        if (features[i].properties.name)
-          featuresList += ':' + features[i].properties.name;
-      }
-      $('#map-query').attr('value', featuresList);
-    });
-  });
-});

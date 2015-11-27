@@ -157,6 +157,9 @@
 
   </div>
 
+  <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
+      <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Chennai was hit by the worst flood in 10 years</div>
+  </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/mapbox-gl-js-common.js"></script>
@@ -181,13 +184,15 @@
         "center": [80.261, 13.014],
         "zoom": 13.8,
         "pitch": 60,
-        "bearing": -64
+        "bearing": -64,
+        "highlight":"water"
       },
       "cooum-river": {
         "center": [80.281, 13.074],
         "zoom": 13.8,
         "pitch": 60,
-        "bearing": -64
+        "bearing": -64,
+        "highlight":"water"
       }
     };
 
@@ -237,6 +242,26 @@
     };
 
     map.on('style.load', function(e) {
+
+      //Live query
+      map.on('mousemove', function(e) {
+        map.featuresAt(e.point, {
+          radius: 4
+        }, function(err, features) {
+          if (err) throw err;
+          var featuresList = '';
+          var feature = '';
+          for (var i = 0; i < 1; i++) {
+            if (features[i].properties.class)
+              featuresList += features[i].properties.class + ' ';
+            if (features[i].properties.type)
+              featuresList += features[i].properties.type + ' ';
+            if (features[i].properties.name)
+              featuresList += ':' + features[i].properties.name;
+          }
+          $('#map-query').attr('value', featuresList);
+        });
+      });
 
       // Popups on click
       map.on('click', function(e) {

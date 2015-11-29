@@ -42,7 +42,7 @@
 
     @media only screen and (max-width: 620px) {
       #sidebar {
-        display:none;
+        display: none;
       }
     }
 
@@ -57,6 +57,10 @@
       bottom: 1em;
       background: rgba(0, 0, 0, 0.4);
       color: #aaa;
+    }
+
+    #feature-count{
+      color: rgba(199,16,181,255);
     }
 
     .map-legend-circle {
@@ -85,8 +89,10 @@
 
     <h1>Flooded Streets</h1>
     <h2><a href='..'>சென்னை</a></h2>
+    <p><strong><span id="feature-count">...</span></strong> inundated roads reported</p>
     <img class="space-bottom1" src="https://cloud.githubusercontent.com/assets/126868/11440554/86851886-9529-11e5-9bf5-55abcc223057.gif">
     <p>This is a crowdsourced effort to map inundated roads in Chennai. Report a flooded street by zooming into the map and clicking it. All the data is <a href="https://github.com/osm-in/flood-map">open</a>.</p>
+
 
     <div data-map='legend'>
 
@@ -298,7 +304,7 @@
       // Select flooded roads
       $.get('http://at.therateof.com:12123/places.geojson', function(data, status) {
           chennaiGeoJSON = JSON.parse(data);
-          console.log(chennaiGeoJSON);
+          updateFeatureCount();
           playWithMap();
         })
         .fail(function() {
@@ -415,6 +421,7 @@
                       addedRoads.splice(index, 1);
                       addedFeatures.splice(index, 1);
                       selectedRoadsSource.setData(chennaiGeoJSON);
+                      updateFeatureCount();
                     });
                   break;
 
@@ -440,6 +447,7 @@
                       chennaiGeoJSON.features.push(tempObj);
                       addedRoads.push(features[i].properties.osm_id);
                       selectedRoadsSource.setData(chennaiGeoJSON);
+                      updateFeatureCount();
                     });
                   break;
                 }
@@ -448,6 +456,14 @@
           }
         });
       }
+
+      //Update feature count
+      function updateFeatureCount() {
+        var count = chennaiGeoJSON.features.length;
+        $("#feature-count").html(count);
+        console.log(count);
+      };
+
     });
 
     function array2rgb(color) {

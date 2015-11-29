@@ -36,8 +36,14 @@
       width: 100%;
     }
 
-    #sidebar{
-      background-color: rgba(40,53,61,0.94);
+    #sidebar {
+      background-color: rgba(40, 53, 61, 0.94);
+    }
+
+    @media only screen and (max-width: 620px) {
+      #sidebar {
+        display:none;
+      }
     }
 
     @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) #map {
@@ -303,7 +309,7 @@
       map.on('mousemove', function(e) {
         map.featuresAt(e.point, {
           radius: 4
-        }, function (err, features) {
+        }, function(err, features) {
           if (err) throw err;
           var featuresList = '';
           for (var i = 0; i < 1; i++) {

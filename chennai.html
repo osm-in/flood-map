@@ -26,7 +26,7 @@
 
     h1 {
       font-size: 3em;
-      margin:0;
+      margin: 0;
     }
 
     #map {
@@ -36,12 +36,20 @@
       width: 100%;
     }
 
+    #sidebar{
+      background-color: rgba(40,53,61,0.94);
+    }
+
+    @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) #map {
+      position: relative;
+    }
+
     #map-query {
       padding: 5px;
       position: absolute;
-      left: 20%;
+      left: 30%;
       bottom: 1em;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       color: #aaa;
     }
 
@@ -82,7 +90,7 @@
         <ul>
           <li>
             <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small" onclick='mapToggle(this);'>
-          Terrain
+          Vulnerable and Inundated areas
         </a>
           </li>
           <li>
@@ -282,19 +290,20 @@
     map.on('style.load', function(e) {
       var chennaiGeoJSON;
       // Select flooded roads
-      $.get('http://at.therateof.com:12123/places.geojson',function (data, status){
-        chennaiGeoJSON = JSON.parse(data);
-        playWithMap();
-      })
-      .fail(function(){
-        alert("Oops! Our server is out for a walk, try again after some time.");
-      });
+      $.get('http://at.therateof.com:12123/places.geojson', function(data, status) {
+          chennaiGeoJSON = JSON.parse(data);
+          console.log(chennaiGeoJSON);
+          playWithMap();
+        })
+        .fail(function() {
+          alert("Oops! Our server is out for a walk, try again after some time.");
+        });
 
       //Live query
       map.on('mousemove', function(e) {
         map.featuresAt(e.point, {
           radius: 4
-        }, function(err, features) {
+        }, function (err, features) {
           if (err) throw err;
           var featuresList = '';
           for (var i = 0; i < 1; i++) {
@@ -340,7 +349,7 @@
         } catch (e) {};
       });
 
-    function playWithMap(){
+      function playWithMap() {
         var addedRoads = [];
         var addedFeatures = [];
         var deletedRoads = [];
@@ -386,19 +395,21 @@
                   tempObj.properties = features[i].properties;
                   tempObj.properties["is_flooded"] = false;
 
-                  $.post("http://at.therateof.com:12123/save",{'data':JSON.stringify(tempObj)}, function (data, status){
+                  $.post("http://at.therateof.com:12123/save", {
+                      'data': JSON.stringify(tempObj)
+                    }, function(data, status) {
 
-                  })
-                  .fail(function(){
+                    })
+                    .fail(function() {
                       alert("Oops! Our server is out for a walk, try again after some time.");
-                  })
-                  .success(function(){
-                    //Remove from all arrays
+                    })
+                    .success(function() {
+                      //Remove from all arrays
                       chennaiGeoJSON['features'].splice(index, 1);
                       addedRoads.splice(index, 1);
                       addedFeatures.splice(index, 1);
                       selectedRoadsSource.setData(chennaiGeoJSON);
-                  });
+                    });
                   break;
 
                 } else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
@@ -409,19 +420,21 @@
                   tempObj.properties = features[i].properties;
                   tempObj.properties["is_flooded"] = true;
 
-                  $.post("http://at.therateof.com:12123/save",{'data':JSON.stringify(tempObj)}, function (data, status){
+                  $.post("http://at.therateof.com:12123/save", {
+                      'data': JSON.stringify(tempObj)
+                    }, function(data, status) {
 
-                  })
-                  .fail(function(){
+                    })
+                    .fail(function() {
                       alert("Oops! Our server is out for a walk, try again after some time.");
-                  })
-                  .success(function(){
+                    })
+                    .success(function() {
                       //Push to all arrays
                       addedFeatures.push(tempObj);
                       chennaiGeoJSON.features.push(tempObj);
                       addedRoads.push(features[i].properties.osm_id);
                       selectedRoadsSource.setData(chennaiGeoJSON);
-                  });
+                    });
                   break;
                 }
               }

@@ -191,6 +191,7 @@
   <script>
     window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
 
+    var API_BASE = 'http://chennai.makeamap.in/';
     // Define map locations
     var mapLocation = {
       "reset": {
@@ -314,7 +315,7 @@
     map.on('style.load', function(e) {
       var chennaiGeoJSON;
       // Select flooded roads
-      $.get('http://at.therateof.com:12123/places.geojson', function(data, status) {
+      $.get(API_BASE + 'places.geojson', function(data, status) {
           chennaiGeoJSON = JSON.parse(data);
           updateFeatureCount();
           playWithMap();
@@ -419,7 +420,7 @@
                   tempObj.properties = features[i].properties;
                   tempObj.properties["is_flooded"] = false;
 
-                  $.post("http://at.therateof.com:12123/save", {
+                  $.post(API_BASE + "save", {
                       'data': JSON.stringify(tempObj)
                     }, function(data, status) {
 
@@ -445,7 +446,7 @@
                   tempObj.properties = features[i].properties;
                   tempObj.properties["is_flooded"] = true;
 
-                  $.post("http://at.therateof.com:12123/save", {
+                  $.post(API_BASE + "save", {
                       'data': JSON.stringify(tempObj)
                     }, function(data, status) {
 

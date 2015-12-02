@@ -165,7 +165,9 @@ map.on('style.load', function (e) {
                 var lastFeatureID = data.features[data.features.length - 1].id;
                 getFeatures(lastFeatureID);
                 selectedRoadsSource.setData(featuresGeoJSON);
+                updateFeatureCount(featuresGeoJSON);
             } else {
+              updateFeatureCount(featuresGeoJSON);
               $('#sidebar').toggleClass('loading');
                 console.log('features', featuresGeoJSON);
                 playWithMap(featuresGeoJSON);

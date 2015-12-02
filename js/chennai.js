@@ -96,7 +96,11 @@ var mapLayerCollection = {
         'bridge-street',
         'bridge-trunk',
         'bridge-motorway',
-        'road-street_limited'
+        'road-street_limited',
+        'aeroway-runway',
+        'aeroway-taxiway',
+        'road-rail',
+        'bridge-rail'
     ]
 };
 

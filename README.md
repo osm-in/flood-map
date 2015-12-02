@@ -10,7 +10,7 @@ If your street, building or neighborhood name is missing on the map, you can add
 The flooded streets layer is contributed by the public. Contributions are anonymous with no version control for the sake of simplicity.
 
 #### Data dump
-You are encouraged to make use of the collected data for further analysis. Download the latest flooded streets layer as a geojson from here: 
+You are encouraged to make use of the collected data for further analysis. Download the latest flooded streets layer as a geojson from here: http://chennai.makeamap.in/places.geojson
 
 
 ### Other Data Sources

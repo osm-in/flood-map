@@ -12,6 +12,8 @@ The flooded streets layer is contributed by the public. Contributions are anonym
 #### Data dump
 You are encouraged to make use of the collected data for further analysis. Download the latest flooded streets layer as a geojson from here: http://chennai.makeamap.in/places.geojson
 
+- [11AM Dec 2](https://github.com/osm-in/flood-map/blob/gh-pages/data/chennai-flooded-streets-Dec2.geojson)
+
 
 ### Other Data Sources
 - **Vulnerable and Inundated Areas**

@@ -1,0 +1,59 @@
+html {
+  background-image: none;
+  background-repeat: no-repeat;
+}
+
+body {
+  background: none;
+}
+
+h1 {
+  font-size: 3em;
+  margin: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+#sidebar {
+  background-color: rgba(40, 53, 61, 0.94);
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 620px) {
+  #sidebar {
+    display: none;
+  }
+}
+
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) #map {
+  position: relative;
+}
+
+#map-query {
+  padding: 5px;
+  position: absolute;
+  left: 30%;
+  bottom: 1em;
+  background: rgba(0, 0, 0, 0.4);
+  color: #aaa;
+}
+
+#feature-count {
+  color: rgba(199, 16, 181, 255);
+}
+
+.map-legend-circle {
+  width: 10px;
+  height: 10px;
+  background: red;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  float: left;
+  margin: 5px 7px 0 0;
+}

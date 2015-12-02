@@ -1,4 +1,7 @@
 var API_BASE = 'http://chennai.makeamap.in/';
+var DATASETS_BASE = 'https://api.mapbox.com/datasets/v1/chennaiflood/cihofezsx00k1u2m4dm7yx57p/';
+// var selectedRoadsSource;
+var datasetsAccessToken = 'sk.eyJ1IjoiY2hlbm5haWZsb29kIiwiYSI6ImNpaG9mOGljdTBibmN0aGo3NWR6Y3Q0aXQifQ.X73YugnJDlhZEhxz2X86WA';
 // Define map locations
 var mapLocation = {
   "reset": {
@@ -122,15 +125,43 @@ map.on('style.load', function(e) {
   
   // Select flooded roads
   $('#map').toggleClass('loading');
-  $.get(API_BASE + 'places.geojson', function(data, status) {
-    chennaiGeoJSON = JSON.parse(data);
-    updateFeatureCount(chennaiGeoJSON);
-    playWithMap(chennaiGeoJSON);
-    $('#map').toggleClass('loading');
-  })
-  .fail(function() {
-    alert('We might be facing server issues due to high traffic.  If this continues please report here: \nhttps://github.com/osm-in/flood-map/issues/');
-  });
+  var featuresGeoJSON = {
+    'type': 'FeatureCollection',
+    'features': []
+  };
+  function getFeatures(startID) {
+    var url = DATASETS_BASE + 'features';
+    var params = {
+      'access_token': datasetsAccessToken
+    };
+    if (startID) {
+      params.start = startID;
+    }
+    $.getJSON(url, params, function(data, status) {
+      if (data.features.length > 0) {
+        data.features.forEach(function(feature) {
+          feature.properties.id = feature.id;
+        });
+        featuresGeoJSON.features = featuresGeoJSON.features.concat(data.features);
+        var lastFeatureID = data.features[data.features.length - 1].id;
+        getFeatures(lastFeatureID);
+      } else {
+        console.log('features', featuresGeoJSON);
+        $('#map').toggleClass('loading');
+        playWithMap(featuresGeoJSON);
+      }
+    });
+  }
+  getFeatures(null);
+  // $.get(API_BASE + 'places.geojson', function(data, status) {
+  //   chennaiGeoJSON = JSON.parse(data);
+  //   updateFeatureCount(chennaiGeoJSON);
+  //   playWithMap(chennaiGeoJSON);
+  //   $('#map').toggleClass('loading');
+  // })
+  // .fail(function() {
+  //   alert('We might be facing server issues due to high traffic.  If this continues please report here: \nhttps://github.com/osm-in/flood-map/issues/');
+  // });
 
   //Live query
   map.on('mousemove', function(e) {
@@ -214,6 +245,7 @@ map.on('style.load', function(e) {
 
     // Toggle way selection on click
     map.on('click', function(e) {
+      console.log('clicked on map');
       if (map.getZoom() >= 15) {
         map.featuresAt(e.point, {
           radius: 5,
@@ -221,35 +253,51 @@ map.on('style.load', function(e) {
           layer: mapLayerCollection["road"]
         }, function(err, features) {
           if (err) throw err;
-
+          console.log('features', features);
           for (var i = 0; i < features.length; i++) {
-            var tempObj = {};
+            console.log('inside for loop');
+            var tempObj = {
+              'type': 'Feature'
+            };
             var index = addedRoads.indexOf(features[i].properties.osm_id);
 
             if (index !== -1 && addedFeatures[index] && (addedFeatures[index].geometry.coordinates.length === features[i].geometry.coordinates.length)) {
 
               //Create temp object
+              tempObj.id = features[i].properties.id;
               tempObj.geometry = features[i].geometry;
               tempObj.properties = features[i].properties;
               tempObj.properties["is_flooded"] = false;
-
+              console.log('tempObj', tempObj);
               $('#map').toggleClass('loading');
-              $.post(API_BASE + "save", {
-                'data': JSON.stringify(tempObj)
-              }, function(data, status) {
-                $('#map').toggleClass('loading');
-              })
-              .fail(function() {
-                alert("Oops! Our server is out for a walk, try again after some time.");
-              })
-              .success(function() {
-                  //Remove from all arrays
+              var saveURL = DATASETS_BASE + '/features/' + tempObj.id + '?access_token=' + datasetsAccessToken;
+              // console.log('save url', saveURL);
+              $.ajax({
+                'method': 'DELETE',
+                'url': saveURL,
+                'contentType': 'application/json',
+                'success': function() {
                   data['features'].splice(index, 1);
                   addedRoads.splice(index, 1);
                   addedFeatures.splice(index, 1);
                   selectedRoadsSource.setData(data);
                   updateFeatureCount(data);
-                });
+                }
+              });
+              // $.post(saveURL, JSON.stringify(tempObj), function(data, status) {
+              //   $('#map').toggleClass('loading');
+              // })
+              // .fail(function() {
+              //   alert("Oops! Our server is out for a walk, try again after some time.");
+              // })
+              // .success(function() {
+              //     //Remove from all arrays
+              //     data['features'].splice(index, 1);
+              //     addedRoads.splice(index, 1);
+              //     addedFeatures.splice(index, 1);
+              //     selectedRoadsSource.setData(data);
+              //     updateFeatureCount(data);
+              //   });
               break;
 
             } else if (features[i].layer['type'] === 'line' && (features[i].geometry['type'] === 'LineString' ||
@@ -259,24 +307,44 @@ map.on('style.load', function(e) {
               tempObj.geometry = features[i].geometry;
               tempObj.properties = features[i].properties;
               tempObj.properties["is_flooded"] = true;
-              
+              console.log('new tempObj', tempObj);
               $('#map').toggleClass('loading');
-              $.post(API_BASE + "save", {
-                'data': JSON.stringify(tempObj)
-              }, function(data, status) {
-                $('#map').toggleClass('loading');
-              })
-              .fail(function() {
-                alert("Oops! Our server is out for a walk, try again after some time.");
-              })
-              .success(function() {
-                  //Push to all arrays
+              var id = md5(JSON.stringify(tempObj));
+              // tempObj.id = id;
+              var saveURL = DATASETS_BASE + 'features/' + id + '?access_token=' + datasetsAccessToken;
+
+              $.ajax({
+                'method': 'PUT',
+                'url': saveURL,
+                'data': JSON.stringify(tempObj),
+                'dataType': 'json',
+                'contentType': 'application/json',
+                'success': function(response) {
+                  tempObj.id = response.id;
+                  tempObj.properties.id = response.id;
                   addedFeatures.push(tempObj);
                   data.features.push(tempObj);
                   addedRoads.push(features[i].properties.osm_id);
                   selectedRoadsSource.setData(data);
-                  updateFeatureCount(data);
-                });
+                  updateFeatureCount(data);                  
+                }
+              });
+              // $.post(API_BASE + "save", {
+              //   'data': JSON.stringify(tempObj)
+              // }, function(data, status) {
+              //   $('#map').toggleClass('loading');
+              // })
+              // .fail(function() {
+              //   alert("Oops! Our server is out for a walk, try again after some time.");
+              // })
+              // .success(function() {
+              //     //Push to all arrays
+              //     addedFeatures.push(tempObj);
+              //     data.features.push(tempObj);
+              //     addedRoads.push(features[i].properties.osm_id);
+              //     selectedRoadsSource.setData(data);
+              //     updateFeatureCount(data);
+              //   });
               break;
             }
           }

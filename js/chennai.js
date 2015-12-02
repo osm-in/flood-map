@@ -139,7 +139,6 @@ map.on('style.load', function (e) {
     });
 
   // Select flooded roads
-    $('#map').toggleClass('loading');
     var featuresGeoJSON = {
         'type': 'FeatureCollection',
         'features': []
@@ -163,7 +162,6 @@ map.on('style.load', function (e) {
                 selectedRoadsSource.setData(featuresGeoJSON);
             } else {
                 console.log('features', featuresGeoJSON);
-                $('#map').toggleClass('loading');
                 playWithMap(featuresGeoJSON);
             }
         });

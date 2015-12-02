@@ -147,6 +147,7 @@ map.on('style.load', function (e) {
         'type': 'FeatureCollection',
         'features': []
     };
+    $('#sidebar').toggleClass('loading');
     function getFeatures(startID) {
         var url = DATASETS_BASE + 'features';
         var params = {
@@ -165,6 +166,7 @@ map.on('style.load', function (e) {
                 getFeatures(lastFeatureID);
                 selectedRoadsSource.setData(featuresGeoJSON);
             } else {
+              $('#sidebar').toggleClass('loading');
                 console.log('features', featuresGeoJSON);
                 playWithMap(featuresGeoJSON);
             }

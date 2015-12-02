@@ -151,18 +151,25 @@ map.on('style.load', function (e) {
         if (startID) {
             params.start = startID;
         }
-        $.getJSON(url, params, function (data) {
-            if (data.features.length > 0) {
-                data.features.forEach(function (feature) {
-                    feature.properties.id = feature.id;
-                });
-                featuresGeoJSON.features = featuresGeoJSON.features.concat(data.features);
-                var lastFeatureID = data.features[data.features.length - 1].id;
-                getFeatures(lastFeatureID);
-                selectedRoadsSource.setData(featuresGeoJSON);
-            } else {
-                console.log('features', featuresGeoJSON);
-                playWithMap(featuresGeoJSON);
+        $.ajax({
+            'method': 'GET',
+            'url': url,
+            'crossDomain': true,
+            'data': params,
+            'dataType': 'json',
+            'contentType': 'application/json',
+            'success': function (data) {
+                if (data.features.length > 0) {
+                    data.features.forEach(function (feature) {
+                        feature.properties.id = feature.id;
+                    });
+                    featuresGeoJSON.features = featuresGeoJSON.features.concat(data.features);
+                    var lastFeatureID = data.features[data.features.length - 1].id;
+                    getFeatures(lastFeatureID);
+                    selectedRoadsSource.setData(featuresGeoJSON);
+                } else {
+                    playWithMap(featuresGeoJSON);
+                }
             }
         });
     }
@@ -230,19 +237,15 @@ map.on('style.load', function (e) {
             addedRoads.push(data.features[i].properties.id);
             addedFeatures.push(data.features[i]);
         }
-        console.log(addedRoads.length);
-        console.log(addedFeatures.length);
 
         // Toggle way selection on click
         map.on('click', function (e) {
-            console.log('clicked on map');
             if (map.getZoom() >= 15) {
                 map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
-                    console.log('featuresAt callback');
+
                     if (err) throw err;
 
                     if (features.length > 0) {
-                        console.log('inside for loop');
                         $('#map').toggleClass('loading');
                         var saveURL = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + datasetsAccessToken;
                         // console.log('save url', saveURL);
@@ -250,6 +253,7 @@ map.on('style.load', function (e) {
                         $.ajax({
                             'method': 'DELETE',
                             'url': saveURL,
+                            'crossDomain': true,
                             'contentType': 'application/json',
                             'success': function () {
                                 $('#map').toggleClass('loading');
@@ -286,6 +290,7 @@ map.on('style.load', function (e) {
                                 'url': saveURL,
                                 'data': JSON.stringify(tempObj),
                                 'dataType': 'json',
+                                'crossDomain': true,
                                 'contentType': 'application/json',
                                 'success': function (response) {
                                     $('#map').toggleClass('loading');

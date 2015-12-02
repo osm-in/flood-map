@@ -13,6 +13,7 @@
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/mCustomScrollbar.min.css">
   <script src="js/vendor/modernizr-2.8.3.min.js"></script>
   <style>
     html {
@@ -38,6 +39,7 @@
 
     #sidebar {
       background-color: rgba(40, 53, 61, 0.94);
+      overflow: hidden;
     }
 
     @media only screen and (max-width: 620px) {
@@ -85,7 +87,7 @@
   <!-- Content -->
   <div id='map'></div>
 
-  <div id='sidebar' class='pin-left col3 pad2 dark fill-navy scroll-styled'>
+  <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
 
     <h1>Flooded Streets</h1>
     <h2><a href='..'>சென்னை</a></h2>
@@ -488,6 +490,20 @@
         return x * 255;
       }).join() + ')';
     }
+  </script>
+  <script src="js/vendor/jquery.mCustomScrollbar.js"></script>
+  <script>
+    $(function() {
+        $("#sidebar").mCustomScrollbar({
+          theme:"rounded-dots",
+          scrollInertia: 100,
+          callbacks: {
+            onInit: function() {
+              $("#sidebar").css("overflow", "auto");
+            }
+          }
+          });
+    });
   </script>
 
   // Tracking Code

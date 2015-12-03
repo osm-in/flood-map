@@ -8,8 +8,8 @@ var mapLocation = {
     'reset': {
         'center': [80.2, 13],
         'zoom': 11,
-        'pitch': 20,
-        'bearing': -30
+        'pitch': 0,
+        'bearing': 0
     },
     'pallikaranai': {
         'center': [80.22, 12.926],
@@ -147,7 +147,7 @@ map.on('style.load', function (e) {
         'type': 'FeatureCollection',
         'features': []
     };
-    $('#sidebar').toggleClass('loading');
+    $('#feature-count').toggleClass('loading');
     function getFeatures(startID) {
         var url = DATASETS_BASE + 'features';
         var params = {
@@ -168,7 +168,7 @@ map.on('style.load', function (e) {
                 updateFeatureCount(featuresGeoJSON);
             } else {
               updateFeatureCount(featuresGeoJSON);
-              $('#sidebar').toggleClass('loading');
+              $('#feature-count').toggleClass('loading');
                 console.log('features', featuresGeoJSON);
                 playWithMap(featuresGeoJSON);
             }
@@ -243,14 +243,12 @@ map.on('style.load', function (e) {
 
         // Toggle way selection on click
         map.on('click', function (e) {
-            console.log('clicked on map');
             if (map.getZoom() >= 15) {
                 map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
                     console.log('featuresAt callback');
                     if (err) throw err;
 
                     if (features.length > 0) {
-                        console.log('inside for loop');
                         $('#map').toggleClass('loading');
                         var saveURL = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + datasetsAccessToken;
                         // console.log('save url', saveURL);

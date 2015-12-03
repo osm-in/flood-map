@@ -167,9 +167,8 @@ map.on('style.load', function (e) {
                 selectedRoadsSource.setData(featuresGeoJSON);
                 updateFeatureCount(featuresGeoJSON);
             } else {
-              updateFeatureCount(featuresGeoJSON);
-              $('#sidebar').toggleClass('loading');
-                console.log('features', featuresGeoJSON);
+                updateFeatureCount(featuresGeoJSON);
+                $('#sidebar').toggleClass('loading');
                 playWithMap(featuresGeoJSON);
             }
         });
@@ -238,22 +237,20 @@ map.on('style.load', function (e) {
             addedRoads.push(data.features[i].properties.id);
             addedFeatures.push(data.features[i]);
         }
-        console.log(addedRoads.length);
-        console.log(addedFeatures.length);
 
-        // Toggle way selection on click
+
         map.on('click', function (e) {
-            console.log('clicked on map');
             if (map.getZoom() >= 15) {
+                //Check if the feature clicked on is in the selected Roads Layer.
+                //If yes, UNSELECT the road
                 map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
-                    console.log('featuresAt callback');
                     if (err) throw err;
 
                     if (features.length > 0) {
-                        console.log('inside for loop');
+
                         $('#map').toggleClass('loading');
                         var saveURL = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + datasetsAccessToken;
-                        // console.log('save url', saveURL);
+
                         var index = addedRoads.indexOf(features[0].properties.id);
                         $.ajax({
                             'method': 'DELETE',
@@ -272,6 +269,9 @@ map.on('style.load', function (e) {
                             }
                         });
                     } else {
+                        //If road is not present in the `selected-roads` layer,
+                        //check the glFeatures layer to see if the road is present.
+                        //If yes,ADD it to the `selected-roads` layer
                         map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: mapLayerCollection['road']}, function (err, glFeatures) {
                             if (err) throw err;
 
@@ -321,9 +321,6 @@ function updateFeatureCount(data) {
     var count = data.features.length;
     $('#feature-count').html(count);
 }
-
-
-
 
 function array2rgb(color) {
     // Combine and return the values

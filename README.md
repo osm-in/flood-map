@@ -4,13 +4,13 @@
 Interactive map to visualize and crowdsource flood related information using [OpenStreetMap](http://openstreetmap.in/#5/22.147/79.102) and [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/)
 
 ### Missing streets
-If your street, building or neighborhood name is missing on the map, you can add it to the basemap directly by editing [OSM](https://www.openstreetmap.org/#map=12/13.0537/80.1768). The flood map will be updated with the new street in under 10 minutes.
+If your street, building or neighborhood name is missing on the map, you can add it to the basemap directly by editing [OpenStreetMap](http://tasks.openstreetmap.in/project/62). The flood map will be updated with the new street in under 10 minutes.
 
 ### Flooded Streets Data
 The flooded streets layer is contributed by the public. Contributions are anonymous with no version control for the sake of simplicity.
 
 #### Data dump
-You are encouraged to make use of the collected data for further analysis. Download the latest flooded streets layer as a geojson from here: http://chennai.makeamap.in/places.geojson
+You are encouraged to make use of the collected data for further analysis. Download the latest flooded streets layer as a geojson using [this Ajax request](https://github.com/osm-in/flood-map/blob/gh-pages/js/chennai.js#L145-L175).
 
 - [11AM Dec 2](https://github.com/osm-in/flood-map/blob/gh-pages/data/chennai-flooded-streets-Dec2.geojson)
 

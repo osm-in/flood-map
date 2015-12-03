@@ -15,7 +15,8 @@ You are encouraged to make use of the collected data for further analysis. Downl
 - [11AM Dec 2](https://github.com/osm-in/flood-map/blob/gh-pages/data/chennai-flooded-streets-Dec2.geojson)
 
 
-### Other Data Sources
+### Data Sources
+- **Base Layer** - [OpenStreetMap](http://osm.org)
 - **Vulnerable and Inundated Areas**
   - **Inundated areas** [Flood Waters Over Chennai Area UNITAR - UNOSAT ](http://www.unitar.org/unosat/node/44/2312)
   - **Low lying locations**: [ISRO Cartodem3](http://bhuvan.nrsc.gov.in/data/download/index.php) and [SRTM 30m](http://earthexplorer.usgs.gov/)

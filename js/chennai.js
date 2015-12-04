@@ -116,8 +116,8 @@ map.on('style.load', function (e) {
         'interactive': true,
         'paint': {
             'line-color': 'rgba(255,5,230,1)',
-            'line-width': 10,
-            'line-opacity': 0.3
+            'line-width': 3,
+            'line-opacity': 0.6
         }
     });
 

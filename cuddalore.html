@@ -1,0 +1,157 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Flood Maps</title>
+  <meta name="description" content="">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/mCustomScrollbar.min.css">
+  <link rel="stylesheet" type="text/css" href="css/chennai.css">
+  <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+  <script src="js/vendor/md5.min.js"></script>
+</head>
+
+<body>
+  <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+  <!-- Content -->
+  <div id='map'></div>
+
+  <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
+
+    <h1>Flooded Streets</h1>
+    <h2><a href='.'>கடலூர்</a></h2>
+    <p>
+      <strong>
+        <span id="feature-count">...</span>
+      </strong> inundated roads reported</p>
+    <img class="space-bottom1" src="https://cloud.githubusercontent.com/assets/126868/11440554/86851886-9529-11e5-9bf5-55abcc223057.gif">
+    <p>This is a crowdsourced effort to map inundated roads in Cuddalore. Report a flooded street by zooming into the map and clicking it. All the data is <a href="https://github.com/osm-in/flood-map">open</a>.</p>
+
+
+    <div data-map='legend'>
+
+      <!--h5>Flood Layers</h5>
+
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small" onclick='mapToggle(this);'>
+          Vulnerable and Inundated areas
+        </a>
+          </li>
+          <li>
+            <a data-map-layer='chennai-relief-camps-22nov' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
+          Flood relief camps (Open on Nov 22)
+        </a>
+          </li>
+          <li>
+            <a data-map-layer='chennai-relief-camps' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
+          Flood relief camps (Including closed)
+        </a>
+          </li>
+          <li>
+            <a data-map-layer='chennai-water-logged-points' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
+          Water logged points
+        </a>
+          </li>
+        </ul>
+      </div>
+
+      <h5>Affected Areas <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
+  (reset)
+</a></h5>
+
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("aminjikarai");'>
+        Aminjikarai
+      </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("velachery");'>
+        Velachery
+      </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("mudichur");'>
+        Mudichur
+      </a>
+          </li>
+          <li>
+            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("omr");'>
+        Old Mahabalipuram Road
+      </a>
+          </li>
+        </ul>
+      </div-->
+
+      <h5>Highlight <a href="#" class="truncate strong bloxk small" onclick='mapHighlightReset();'>
+  (reset)
+</a></h5>
+
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='water' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
+          Waterbodies
+        </a>
+          </li>
+          <li>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='road-subways' class="truncate strong bloxk small " onclick='mapHighlight(this);'>
+          Road Subways & Tunnels
+        </a>
+          </li>
+          <li>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='road-bridges' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
+          Road Flyovers & Bridges
+        </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <span id='map-query'></span>
+
+  <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
+    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Help planners and city authorities understand the flooding problem by contributing to this map. <a href="https://github.com/osm-in/flood-map">Learn more</a>.</div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="js/vendor/jquery.mCustomScrollbar.js"></script>
+  <script src="js/mapbox-gl-js-common.js"></script>
+  <script type="text/javascript" src="js/chennai.js"></script>
+
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-67841289-2', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+</body>
+
+</html>

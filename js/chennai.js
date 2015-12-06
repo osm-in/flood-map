@@ -66,6 +66,9 @@ var map = new mapboxgl.Map({
 });
 mapLocate('reset');
 
+//Supress Tile errors
+map.off('tile.error', map.onError);
+
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.Navigation());
 

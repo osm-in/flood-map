@@ -122,7 +122,7 @@ map.on('style.load', function (e) {
             'line-width': 3,
             'line-opacity': 0.6
         }
-    });
+    }, 'road-waterlogged');
 
     map.addSource('terrain-data', {
         type: 'vector',

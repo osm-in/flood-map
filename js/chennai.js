@@ -236,6 +236,9 @@ map.on('style.load', function (e) {
         var addedRoads = [];
         var addedFeatures = [];
 
+        //Dump Data
+        window.dump = JSON.stringify(data);
+
         for (var i = 0; i < data.features.length; i++) {
             addedRoads.push(data.features[i].properties.id);
             addedFeatures.push(data.features[i]);

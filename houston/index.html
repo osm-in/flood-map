@@ -1,0 +1,81 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Flood Maps</title>
+  <meta name="description" content="">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/mCustomScrollbar.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/texas.css">
+  <script src="../js/vendor/modernizr-2.8.3.min.js"></script>
+  <script src="../js/vendor/md5.min.js"></script>
+</head>
+
+<body>
+  <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+  <!-- Content -->
+  <div id='map'></div>
+
+  <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
+
+    <h1>U-Flood</h1>
+    <h2><a href='.'>Street Map</a></h2>
+    <p>
+      <strong>
+        <span id="feature-count">...</span>
+      </strong> inundated roads reported</p>
+    <p>This is a crowdsourced effort to map inundated roads in Houston. Report a flooded (or cleared) street by zooming into the map and clicking it. All the data is <a href="https://github.com/tailwindlabs/flood-map">open</a>.</p>
+    <p>Big thanks to OpenStreetMap India for the code!</p>
+
+
+    <div data-map='legend'>
+
+      <h5>Highlight <a href="#" class="truncate strong bloxk small" onclick='mapHighlightReset();'>
+  (reset)
+</a></h5>
+
+      <div class="space-bottom1">
+        <ul>
+          <li>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='water' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
+          Waterbodies
+        </a>
+          </li>
+          <li>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='road-subways' class="truncate strong bloxk small " onclick='mapHighlight(this);'>
+          Road Subways & Tunnels
+        </a>
+          </li>
+          <li>
+            <a href="#" data-map-layer-highlight='red' data-map-layer='road-bridges' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
+          Road Flyovers & Bridges
+        </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <span id='map-query'></span>
+
+  <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
+    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Help the community track flooding problems by contributing to this map. <a href="https://github.com/tailwindlabs/flood-map">Learn more</a>.</div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="../js/vendor/jquery.mCustomScrollbar.js"></script>
+  <script src="../js/mapbox-gl-js-common.js"></script>
+  <script type="text/javascript" src="../js/texas.js"></script>
+</body>
+</html>

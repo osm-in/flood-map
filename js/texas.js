@@ -1,25 +1,24 @@
 var DATASET_ID = 'cj6v4db3r0wpt2wrp4ih050r5';
 var DATASETS_BASE = 'https://api.mapbox.com/datasets/v1/tailwindlabs/' + DATASET_ID + '/';
-// var selectedRoadsSource;
 var datasetsAccessToken = 'sk.eyJ1IjoidGFpbHdpbmRsYWJzIiwiYSI6ImNqNnY0cGN2MzEwM3EzMnBkNHM3OWoxaWgifQ.3rwB8LW4khqcDoEekNCbTg';
 
 // Define map locations
 var mapLocation = {
     'reset': {
         'center': [-95.4, 29.8],
-        'zoom': 11,
+        'zoom': 14,
         'pitch': 0,
         'bearing': 0
     },
     'houston': {
         'center': [-95.4, 29.8],
-        'zoom': 11,
+        'zoom': 14,
         'pitch': 0,
         'bearing': 0
     },
     'galveston': {
         'center': [-94.8, 29.3],
-        'zoom': 11,
+        'zoom': 14,
         'pitch': 0,
         'bearing': 0
     }
@@ -45,12 +44,8 @@ map.addControl(new mapboxgl.Navigation());
 var mapLayerCollection = {
     'water': ['water', 'waterway-river-canal', 'waterway-small'],
     'road-bridges': ['bridge-main', 'bridge-street', 'bridge-trunk', 'bridge-motorway'],
-    'cartodem': ['chennai-cartodem'],
     'buildings': ['building'],
     'road-subways': ['tunnel-motorway', 'tunnel-trunk', 'tunnel-main', 'tunnel-street'],
-    'chennai-relief-camps': ['chennai-relief-camps'],
-    'chennai-relief-camps-22nov': ['chennai-relief-camps-22nov'],
-    'chennai-water-logged-points': ['chennai-water-logged-points'],
     'road': [
         'road-main',
         'road-construction',
@@ -93,27 +88,6 @@ map.on('style.load', function (e) {
         }
     }, 'road-waterlogged');
 
-    map.addSource('terrain-data', {
-        type: 'vector',
-        url: 'mapbox://mapbox.mapbox-terrain-v2'
-    });
-
-    map.addLayer({
-        'id': 'terrain-data',
-        'type': 'line',
-        'source': 'terrain-data',
-        'source-layer': 'contour',
-        'layout': {
-            'line-join': 'round',
-            'line-cap': 'round'
-        },
-        'paint': {
-            'line-color': '#ff69b4',
-            'line-opacity': '0.3',
-            'line-width': 1
-        }
-    });
-
   // Select flooded roads
     var featuresGeoJSON = {
         'type': 'FeatureCollection',
@@ -148,45 +122,6 @@ map.on('style.load', function (e) {
 
     getFeatures(null);
 
-  //Live query
-    map.on('mousemove', function (e) {
-        map.featuresAt(e.point, {
-            radius: 4
-        }, function (err, features) {
-            if (err) throw err;
-
-            var featuresList = '';
-            if (features[0]) {
-                if (features[0].properties.class)
-                    featuresList += features[0].properties.class + ' ';
-                if (features[0].properties.type)
-                    featuresList += features[0].properties.type + '';
-                if (features[0].properties.name)
-                    featuresList += '- ' + features[0].properties.name;
-                $('#map-query').html(featuresList);
-            }
-        });
-    });
-
-  //Popups on click
-    map.on('click', function (e) {
-        map.featuresAt(e.point, {
-            radius: 10,
-            layer: ['chennai-relief-camps', 'chennai-relief-camps-22nov'],
-            includeGeometry: true
-        }, function (err, features) {
-            if (err) throw err;
-
-            if (features.length > 0) {
-                var popupHTML = '<h5>' + features[0].properties.Name + '</h5><p>' + $('[data-map-layer=' + features[0].layer.id + ']').html() + '</p>';
-                var popup = new mapboxgl.Popup()
-                                        .setLngLat(features[0].geometry.coordinates)
-                                        .setHTML(popupHTML)
-                                        .addTo(map);
-            }
-        });
-    });
-
   // Update map legend from styles
   $('[data-map-layer]').each(function () {
       // Get the color of the feature from the map
@@ -215,7 +150,7 @@ map.on('style.load', function (e) {
 
 
         map.on('click', function (e) {
-            if (map.getZoom() >= 15) {
+            if (map.getZoom() >= 13.9) {
                 //Check if the feature clicked on is in the selected Roads Layer.
                 //If yes, UNSELECT the road
                 map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {

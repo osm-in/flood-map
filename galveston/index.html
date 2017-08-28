@@ -3,13 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Flood Maps</title>
-  <meta name="description" content="">
+  <title>Galveston Flood Map</title>
+  <meta name="description" content="Crowdsourced flood mapping from the U-Flood project.">
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#ffffff">
 
   <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js'></script>
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.css' rel='stylesheet' />
   <link rel="stylesheet" href="../css/normalize.css">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/mCustomScrollbar.min.css">
@@ -27,13 +33,13 @@
 
   <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
 
-    <h1>U-Flood</h1>
-    <h2><a href='.'>Street Map</a></h2>
+    <h1><a href='/'>U-Flood</a></h1>
+    <h2>Street Map</h2>
     <p>
       <strong>
         <span id="feature-count">...</span>
       </strong> inundated roads reported</p>
-    <p>This is a crowdsourced effort to map inundated roads in Houston. Report a flooded (or cleared) street by zooming into the map and clicking it. All the data is <a href="https://github.com/tailwindlabs/flood-map">open</a>.</p>
+    <p>This is a crowdsourced effort to map inundated roads in Galveston. Report a flooded (or cleared) street by zooming into the map and clicking it. All the data is <a href="https://github.com/tailwindlabs/flood-map">open</a>.</p>
     <p>Big thanks to OpenStreetMap India for the code!</p>
 
 
@@ -67,10 +73,8 @@
 
   </div>
 
-  <span id='map-query'></span>
-
   <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
-    <div id="copy" class="pad2 fill-darken3 round prose prose-big col12" style="display: block;">Help the community track flooding problems by contributing to this map. <a href="https://github.com/tailwindlabs/flood-map">Learn more</a>.</div>
+    <div id="copy" class="pad2 fill-darken3 round prose col12" style="display: block;">Zoom in to your street, click and help the community track flooding problems. <a href="https://github.com/tailwindlabs/flood-map/blob/gh-pages/README.md">Learn more</a>.</div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

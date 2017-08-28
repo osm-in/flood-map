@@ -26,10 +26,11 @@ var mapLocation = {
 
 
 // Simple map
-mapboxgl.accessToken = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
+mapboxgl.accessToken = 'pk.eyJ1IjoidGFpbHdpbmRsYWJzIiwiYSI6ImNqNnY0dmxubTByeXEyd3RiMmVud3MyMXoifQ.K3O38Yi_VgQJdMFvdh1OiQ';
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
+    // style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
+    style: 'mapbox://styles/tailwindlabs/cj6vnoe1v8bd72sp9u20f6vku',
     hash: true
 });
 mapLocate('reset');

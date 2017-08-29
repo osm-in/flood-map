@@ -52,8 +52,10 @@ var mapLocation = {
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFpbHdpbmRsYWJzIiwiYSI6ImNqNnc4Y3UxcTE5azUzM3JwdDBpbWVta3QifQ._wo9Vm2l27CaiRbLKUVZjg';
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/tailwindlabs/cj6wkm2k83iha2ro5nxihboto',
-    hash: true
+    // style: 'mapbox://styles/tailwindlabs/cj6wkm2k83iha2ro5nxihboto',
+    style: STYLE,
+    hash: true,
+    maxBounds: BOUNDS
 });
 mapLocate(LOCALE);
 
@@ -105,7 +107,7 @@ map.on('style.load', function (e) {
         'source': 'selected-roads',
         'interactive': true,
         'paint': {
-            'line-color': 'rgba(255,5,230,1)',
+            'line-color': 'rgba(66,167,245,1)',
             'line-width': 3,
             'line-opacity': 0.6
         }

@@ -16,7 +16,7 @@
     <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="js/lib/modernizr-2.8.3.min.js"></script>
     <style>
       html{
         background-image: url('img/background.jpg');
@@ -37,33 +37,66 @@
     <!-- Content -->
     <div class='limiter'>
 
-      <h1 class='fancy'>U-Flood Maps</h1>
+      <h1 class='fancy' style='color: white;'>U-Flood</h1>
 
       <div class='col12 clearfix space-bottom4'>
 
-        <div class='col6 pad2 prose dark fill-navy keyline-right'>
-            <h2>Houston</h3>
-            <p>The Bay City is currently being flooded by rains from Hurricane Harvey.</p>
-            <a class='button stroke' href='/houston/'>View Map</a>
+        <div class='col4 pad2 prose dark fill-navy keyline-right'>
+            <h2>I-45 Corridor</h3>
+            <a class='button stroke' href='/i45corridor/'>View Map</a>
         </div>
 
-        <div class='col6 pad2 prose dark fill-navy keyline-right'>
+        <div class='col4 pad2 prose dark fill-navy keyline-right'>
             <h2>Galveston</h3>
-            <p>The island is currently being flooded by rains from Hurricane Harvey.</p>
             <a class='button stroke' href='/galveston/'>View Map</a>
+        </div>
+
+        <div class='col4 pad2 prose dark fill-navy keyline-right'>
+            <h2>Beaumont</h3>
+            <a class='button stroke' href='/beaumont/'>View Map</a>
+        </div>
+
+      </div>
+
+      <div class='col12 clearfix space-bottom4'>
+
+        <div class='col4 pad2 prose dark fill-navy keyline-right'>
+            <h2>Lake Charles</h3>
+            <a class='button stroke' href='/lakecharles/'>View Map</a>
+        </div>
+
+        <div class='col4 pad2 prose dark fill-navy keyline-right'>
+            <h2>Baton Rouge</h3>
+            <a class='button stroke' href='/batonrouge/'>View Map</a>
+        </div>
+
+        <div class='col4 pad2 prose dark fill-navy keyline-right'>
+            <h2>New Orleans</h3>
+            <a class='button stroke' href='/neworleans/'>View Map</a>
         </div>
 
       </div>
 
       <div class='col12 clearfix'>
-        <p>A project to visualize flood information using open data and interactive maps <a class='icon github button short' href='https://github.com/tailwindlabs/flood-map'>Fork me</a></p>
+        <h2 class='blanco'>A project to visualize flood reports using open data and interactive maps  <a class='icon github button short' href='https://github.com/tailwindlabs/flood-map'>Fork me</a></h2>
+        <br />
+        <h2 class='blanco'>Please consider donating to keep our servers running  <a href="https://www.patreon.com/uflood"><img src="img/patreon.png"/></a></h2>
       </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>
-        window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')
+        window.jQuery || document.write('<script src="js/lib/jquery-1.11.3.min.js"><\/script>')
     </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-66885244-4', 'auto');
+      ga('send', 'pageview');
+  </script>
 </body>
 
 </html>

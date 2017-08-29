@@ -1,15 +1,8 @@
-var DATASET_ID = 'cj6v4db3r0wpt2wrp4ih050r5';
 var DATASETS_BASE = 'https://api.mapbox.com/datasets/v1/tailwindlabs/' + DATASET_ID + '/';
 var datasetsAccessToken = 'sk.eyJ1IjoidGFpbHdpbmRsYWJzIiwiYSI6ImNqNnY0cGN2MzEwM3EzMnBkNHM3OWoxaWgifQ.3rwB8LW4khqcDoEekNCbTg';
 
 // Define map locations
 var mapLocation = {
-    'reset': {
-        'center': [-95.4, 29.8],
-        'zoom': 14,
-        'pitch': 0,
-        'bearing': 0
-    },
     'houston': {
         'center': [-95.4, 29.8],
         'zoom': 14,
@@ -21,19 +14,48 @@ var mapLocation = {
         'zoom': 14,
         'pitch': 0,
         'bearing': 0
+    },
+    'beaumont': {
+        'center': [-94.1, 30.08],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'lakecharles': {
+        'center': [-93.23, 30.22],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'batonrouge': {
+        'center': [-91.16, 30.45],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'i45corridor': {
+        'center': [-95.11, 29.52],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'neworleans': {
+        'center': [-90.1, 29.94],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
     }
 };
 
 
 // Simple map
-mapboxgl.accessToken = 'pk.eyJ1IjoidGFpbHdpbmRsYWJzIiwiYSI6ImNqNnY0dmxubTByeXEyd3RiMmVud3MyMXoifQ.K3O38Yi_VgQJdMFvdh1OiQ';
+mapboxgl.accessToken = 'pk.eyJ1IjoidGFpbHdpbmRsYWJzIiwiYSI6ImNqNnc4Y3UxcTE5azUzM3JwdDBpbWVta3QifQ._wo9Vm2l27CaiRbLKUVZjg';
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    // style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
-    style: 'mapbox://styles/tailwindlabs/cj6vnoe1v8bd72sp9u20f6vku',
+    style: 'mapbox://styles/tailwindlabs/cj6wkm2k83iha2ro5nxihboto',
     hash: true
 });
-mapLocate('reset');
+mapLocate(LOCALE);
 
 //Supress Tile errors
 map.off('tile.error', map.onError);

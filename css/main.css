@@ -1,11 +1,12 @@
-body{
+body {
   width:100%;
 }
+
 #panel {
 
 }
-#map {
 
+#map {
   width: 100%;
   min-height: 200px;
 }

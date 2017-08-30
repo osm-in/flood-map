@@ -107,7 +107,7 @@ map.on('style.load', function (e) {
         'source': 'selected-roads',
         'interactive': true,
         'paint': {
-            'line-color': 'rgba(66,167,245,1)',
+            'line-color': 'rgba(199,16,181,1)',
             'line-width': 3,
             'line-opacity': 0.6
         }

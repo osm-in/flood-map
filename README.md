@@ -3,6 +3,7 @@ Please note: this is alpha software, so bear with us. We hope it will be useful 
 
 Interactive map to visualize and crowdsource flood related information using [OpenStreetMap](http://www.openstreetmap.org/) and [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/). Read more in the press
 
+- [GIM](https://www.gim-international.com/content/news/crowdsourced-mapping-projects-aid-post-harvey-disaster-management)
 - [CBS](https://www.cbsnews.com/news/houston-harvey-u-flood-maps/?ftag=CNM-00-10aab6a&linkId=41670697)
 - [CNET](https://www.cnet.com/news/maps-of-houstons-floods-shows-its-worse-than-you-thought-hurricane-harvey/)
 - [Mashable](http://mashable.com/2017/08/30/crowdsource-map-u-flood-tracks-harvey-flooding/#WWljEZGHGmqF)

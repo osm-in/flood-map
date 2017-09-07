@@ -44,6 +44,12 @@ var mapLocation = {
         'zoom': 14,
         'pitch': 0,
         'bearing': 0
+    },
+    'learn': {
+        'center': [-80.19, 25.77],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
     }
 };
 

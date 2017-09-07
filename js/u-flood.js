@@ -265,14 +265,14 @@ function array2rgb(color) {
     }).join() + ')';
 }
 
-$(function () {
-    $('#sidebar').mCustomScrollbar({
-        theme: 'rounded-dots',
-        scrollInertia: 100,
-        callbacks: {
-            onInit: function () {
-                $('#sidebar').css('overflow', 'auto');
-            }
-        }
-    });
+$('#sidebar-open').on('click', function () {
+  if ($(window).width() > 736) {
+    $('#sidebar').css('width', '275px');
+  } else {
+    $('#sidebar').css('width', '80%');
+  }
+});
+
+$('#sidebar-close').on('click', function () {
+  $('#sidebar').css('width', '0px');
 });

@@ -1,27 +1,28 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class='no-js' lang='en'>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>New Orleans U-Flood Map</title>
-  <meta name="description" content="Crowdsourced flood mapping from the U-Flood project.">
+  <meta charset='utf-8'>
+  <meta http-equiv='x-ua-compatible' content='ie=edge'>
+  <title>U-Flood | New Orleans</title>
+  <meta name='description' content='Crowdsourced flood mapping from the U-Flood project.'>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="theme-color" content="#ffffff">
-
-  <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
+  <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png'>
+  <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png'>
+  <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png'>
+  <link rel='manifest' href='/manifest.json'>
+  <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5'>
+  <meta name='theme-color' content='#ffffff'>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.css' rel='stylesheet' />
-  <link rel="stylesheet" href="../css/normalize.css">
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/mCustomScrollbar.min.css">
-  <link rel="stylesheet" type="text/css" href="../css/u-flood.css">
-  <script src="../js/lib/modernizr-2.8.3.min.js"></script>
-  <script src="../js/lib/md5.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+  <script src='https://use.fontawesome.com/c32d282f8e.js'></script>
+  <link rel='stylesheet' type='text/css' href='../css/normalize.css'>
+  <link rel='stylesheet' type='text/css' href='../css/u-flood.css'>
+  <script src='../js/lib/modernizr-2.8.3.min.js'></script>
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:50px; bottom:0px; width:100%; }
+  </style>
 </head>
 
 <body>
@@ -30,28 +31,28 @@
         <![endif]-->
   <!-- Content -->
   <div id='map'></div>
-
-  <div id='sidebar' class='pin-left col3 pad2 dark fill-navy'>
-
-    <h1><a href='https://u-flood.com'>U-Flood</a></h1>
-    <h2>Street Map</h2>
-    <p>
-      <strong>
-        <span id="feature-count">...</span>
-      </strong> inundated roads reported</p>
-    <p>This is a crowdsourced effort to map inundated roads in New Orleans. Report a flooded (or cleared) street by zooming into the map and clicking/tapping it. All data are <a href="https://www.dropbox.com/sh/525vvot1fe56941/AABRuDQF9qqHs-7B4GNDAdxTa?dl=0">open</a>.</p>
-    <p>We rely on users to maintain the accuracy of flood reports. Please do your part, especially once roads have dried out.</p>
-    <p>Big thanks to OpenStreetMap India for the code!</p>
-
+  <div class='header-box'>
+    <a href='https://u-flood.com' id='logo'><img src='/img/uflood_logo.png'/></a>
+    <a href='#' id='sidebar-open'><i class='fa fa-lg fa-question-circle-o'></i></a>
   </div>
 
-  <div class="pad2 col8 space-bottom2 dark" style="position: absolute; z-index: 1000; bottom: 0; right: 0">
-    <div id="copy" class="pad2 fill-darken3 round prose col12" style="display: block;">Zoom in to your street and click/tap to report it as flooded (or cleared). <a href="https://github.com/tailwindlabs/flood-map/blob/gh-pages/README.md">Learn more</a>.</div>
+  <div id='sidebar' class='sidebar-box'>
+    <a href='#' id='sidebar-close'><i class='fa fa-close'></i></a>
+    <div class='info-box'>
+      <p><strong><span id="feature-count">...</span>
+        </strong> inundated roads reported</p>
+      <br />
+      <p>This is a crowdsourced effort to map inundated roads in New Orleans. We rely on users to maintain the accuracy of flood reports. Please do your part, especially once roads have dried out.</p>
+      <br />
+      <p>Zoom in to your street and click/tap to report it as flooded or cleared. If you accidentally mark a street, just click/tap again to undo the change.</p>
+      <br />
+      <p>All data are <a href="https://www.dropbox.com/sh/525vvot1fe56941/AABRuDQF9qqHs-7B4GNDAdxTa?dl=0">open</a>. Big thanks to OpenStreetMap India for the <a href='https://github.com/tailwindlabs/flood-map'>code</a>!</p>
+    </div>
   </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="../js/lib/jquery.mCustomScrollbar.js"></script>
-  <script src="../js/mapbox-gl-js-common.js"></script>
+  <script src='../js/lib/jquery-3.2.1.min.js'></script>
+  <script src='../js/lib/md5.min.js'></script>
+  <script src='../js/mapbox-gl-js-common.js'></script>
   <script>
     var LOCALE = 'neworleans';
     var DATASET_ID = 'cj6wnkash174t2qtbna0qkyuy';
@@ -61,7 +62,7 @@
       [-90.37, 29.89]
     ];
   </script>
-  <script type="text/javascript" src="../js/u-flood.js"></script>
+  <script type='text/javascript' src='../js/u-flood.js'></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -1,37 +1,54 @@
-html {
-  background-image: none;
-  background-repeat: no-repeat;
+.header-box {
+  height: 50px;
+  width: 100%;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
 }
 
-body {
-  background: none;
+#logo {
+  position: absolute;
+  margin-top: 5px;
+  margin-left: 5px;
 }
 
-h1 {
-  font-size: 3em;
-  margin: 0;
+.sidebar-box {
+  font-family: 'Open Sans', sans-serif;
+  height: calc(100% - 50px);
+  width: 0px;
+  position: fixed;
+  z-index: 2;
+  top: 50px;
+  left: 0px;
+  background-color: rgba(255, 255, 255, .9);
+  overflow-x: hidden;
+  padding-top: 50px;
+  transition: 0.5s;
 }
 
-#map {
+.info-box {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.info-box a {
+  color: #3264a6;
+}
+
+#sidebar-open {
+  top: 18px;
+  right: 17px;
+  color: black;
+  position: absolute;
+}
+
+#sidebar-close {
   position: absolute;
   top: 0;
-  bottom: 0;
-  width: 100%;
-}
-
-#sidebar {
-  background-color: rgba(40, 53, 61, 0.94);
-  overflow: hidden;
-}
-
-@media only screen and (max-width: 670px) {
-  #sidebar {
-    display: none;
-  }
-}
-
-@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) #map {
-  position: relative;
+  right: 25px;
+  color: black;
+  font-size: 36px;
+  margin-left: 50px;
 }
 
 #map-query {
@@ -56,4 +73,15 @@ h1 {
   border-radius: 50px;
   float: left;
   margin: 5px 7px 0 0;
+}
+
+p {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  font-size: 13px;
+}
+
+h1 {
+  font-size: 3em;
+  margin: 0;
 }

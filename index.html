@@ -1,22 +1,21 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class='no-js' lang='en'>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>U-Flood Maps</title>
-    <meta name="description" content="Crowdsourced flood mapping from the U-Flood Project">
+    <meta charset='utf-8'>
+    <meta http-equiv='x-ua-compatible' content='ie=edge'>
+    <title>floodmap.io</title>
+    <meta name='description' content='Crowdsourced flood mapping from the floodmap.io project.'>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="theme-color" content="#ffffff">
-
-    <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
-    <script src="js/lib/modernizr-2.8.3.min.js"></script>
+    <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png'>
+    <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png'>
+    <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png'>
+    <link rel='manifest' href='/manifest.json'>
+    <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5'>
+    <meta name='theme-color' content='#ffffff'>
+    <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet'>
+    <link rel='stylesheet' href='css/normalize.css'>
+    <link rel='stylesheet' type='text/css' href='css/floodmap.css'>
+    <script src='js/lib/modernizr-2.8.3.min.js'></script>
     <style>
       html{
         background-image: url('img/background.jpg');
@@ -36,62 +35,74 @@
         <![endif]-->
 
     <!-- Content -->
-    <div class='limiter'>
+    <div class='header-box'>
+      <a href='/' id='logo'><img src='/img/floodmap_logo.png'/></a>
+    </div>
 
-      <h1 class='fancy' style='color: white;'>U-Flood</h1>
+    <div class='limiter'>
 
       <div class='col12 clearfix space-bottom4'>
 
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>Learn</h3>
-            <a class='button stroke' href='/learn/'>View Map</a>
-        </div>
-
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>Houston</h3>
-            <a class='button stroke' href='/houston/'>View Map</a>
-        </div>
-
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>I-45 Corridor</h3>
-            <a class='button stroke' href='/i45corridor/'>View Map</a>
-        </div>
-
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>Galveston</h3>
-            <a class='button stroke' href='/galveston/'>View Map</a>
+        <div class='margin4 col4 pad2 prose dark fill-gray keyline-right'>
+            <h2>Get Started</h3>
+            <p><strong>Start here to practice mapping flooded streets.</strong></p>
+            <a class='button stroke' href='/learn/'><span class='icon polyline'></span> Learn</a>
         </div>
 
       </div>
 
       <div class='col12 clearfix space-bottom4'>
 
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>Beaumont</h3>
-            <a class='button stroke' href='/beaumont/'>View Map</a>
+        <div class='col4 pad2 prose dark fill-gray keyline-right'>
+            <h2>Fort Myers, FL</h3>
+            <img src='img/ft_myers.png' />
+            <a class='button stroke' href='/fortmyers/'><span class='icon polyline'></span> Map</a>
         </div>
 
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>Lake Charles</h3>
-            <a class='button stroke' href='/lakecharles/'>View Map</a>
+        <div class='col4 pad2 prose dark fill-gray keyline-right'>
+            <h2>Miami, FL</h3>
+              <img src='img/miami.png' />
+            <a class='button stroke' href='/miami/'><span class='icon polyline'></span> Map</a>
         </div>
 
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>Baton Rouge</h3>
-            <a class='button stroke' href='/batonrouge/'>View Map</a>
+        <div class='col4 pad2 prose dark fill-gray keyline-right'>
+            <h2>Orlando, FL</h3>
+            <img src='img/orlando.png' />
+            <a class='button stroke' href='/orlando/'><span class='icon polyline'></span> Map</a>
         </div>
 
-        <div class='col3 pad2 prose dark fill-navy keyline-right'>
-            <h2>New Orleans</h3>
-            <a class='button stroke' href='/neworleans/'>View Map</a>
+      </div>
+
+      <div class='col12 clearfix space-bottom4'>
+
+        <div class='col4 pad2 prose dark fill-gray keyline-right'>
+            <h2>Palm Beach, FL</h3>
+            <img src='img/palm_beach.png' />
+            <a class='button stroke' href='/palmbeach/'><span class='icon polyline'></span> Map</a>
+        </div>
+
+        <div class='col4 pad2 prose dark fill-gray keyline-right'>
+            <h2>Pensacola, FL</h3>
+            <img src='img/pensacola.png' />
+            <a class='button stroke' href='/pensacola/'><span class='icon polyline'></span> Map</a>
+        </div>
+
+        <div class='col4 pad2 prose dark fill-gray keyline-right'>
+            <h2>Tampa, FL</h3>
+            <img src='img/tampa.png' />
+            <a class='button stroke' href='/tampa/'><span class='icon polyline'></span> Map</a>
         </div>
 
       </div>
 
       <div class='col12 clearfix'>
-        <h2 class='blanco'>A project to visualize flood reports using open data and interactive maps <a class='icon github button short' href='https://github.com/tailwindlabs/flood-map'>Fork me</a></h2>
+        <h2>A project to visualize flood reports using open data and interactive maps <a class='icon github button short' href='https://github.com/tailwindlabs/flood-map'>Fork me</a></h2>
       </div>
 
+    </div>
+
+    <div class='footer'>
+      <p><strong>&copy; 2017 The floodmap.io contributors. All content is <a href='http://creativecommons.org/licenses/by/4.0/'>CC-BY 4.0</a>.</strong></p>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -104,9 +115,9 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-66885244-4', 'auto');
+      ga('create', 'UA-66885244-6', 'auto');
       ga('send', 'pageview');
-  </script>
+    </script>
 </body>
 
 </html>

@@ -50,6 +50,42 @@ var mapLocation = {
         'zoom': 14,
         'pitch': 0,
         'bearing': 0
+    },
+    'miami': {
+        'center': [-80.19, 25.77],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'fortmyers': {
+        'center': [-81.87, 26.63],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'orlando': {
+        'center': [-81.37, 28.54],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'palmbeach': {
+        'center': [-80.04, 26.70],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'pensacola': {
+        'center': [-87.21, 30.42],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
+    },
+    'tampa': {
+        'center': [-82.46, 27.95],
+        'zoom': 14,
+        'pitch': 0,
+        'bearing': 0
     }
 };
 

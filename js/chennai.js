@@ -288,6 +288,7 @@ map.on('style.load', function (e) {
                             tempObj.geometry = glFeatures[0].geometry;
                             tempObj.properties = glFeatures[0].properties;
                             tempObj.properties['is_flooded'] = true;
+                            tempObj.properties['timestamp'] = Date.now();
 
                             $('#map').toggleClass('loading');
 

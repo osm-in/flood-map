@@ -21,25 +21,9 @@ map.addControl(new mapboxgl.Navigation());
 
 map.on('style.load', function (e) {
 
-    var selectedRoadsSource = new mapboxgl.GeoJSONSource({});
+  addSourcesAndLayers();
 
-    map.addSource('selected-roads', selectedRoadsSource);
-    map.addLayer({
-        'id': 'selected-roads',
-        'type': 'line',
-        'source': 'selected-roads',
-        'interactive': true,
-        'paint': {
-            'line-color': 'rgba(255,5,230,1)',
-            'line-width': 3,
-            'line-opacity': 0.6
-        }
-    }, 'road-waterlogged');
-
-    map.addSource('terrain-data', {
-        type: 'vector',
-        url: 'mapbox://mapbox.mapbox-terrain-v2'
-    });
+  $('#feature-count').toggleClass('loading');
 
     map.addLayer({
         'id': 'terrain-data',

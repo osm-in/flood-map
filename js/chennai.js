@@ -48,11 +48,33 @@ map.on('style.load', function (e) {
       return;
     }
 
-  // Select flooded roads
-    var featuresGeoJSON = {
-        'type': 'FeatureCollection',
-        'features': []
+  });
+});
+
+function getFeatures(startID) {
+  console.log('*************** getFeatures')
+  var url = DATASETS_BASE + 'features';
+  var params = {
+    'access_token': DATASETS_ACCESS_TOKEN
+  };
+  if (startID) {
+      params.start = startID;
+  }
+  $.get(url, params, function (data) {
+    var features = {
+        type: 'FeatureCollection'
     };
+    data.features.forEach(function (feature) {
+        feature.properties.id = feature.id;
+    });
+    features.features = data.features;
+
+    var lastFeatureID = data.features[data.features.length - 1].id;
+    getFeatures(lastFeatureID);
+
+    SELECTED_ROADS_SOURCE.setData(features);
+
+    updateFeatureCount(features);
     $('#feature-count').toggleClass('loading');
     function getFeatures(startID) {
         var url = DATASETS_BASE + 'features';

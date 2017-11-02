@@ -19,41 +19,6 @@ map.off('tile.error', map.onError);
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.Navigation());
 
-// Define a layer collection for easy styling
-var mapLayerCollection = {
-    'water': ['water', 'waterway-river-canal', 'waterway-small'],
-    'road-bridges': ['bridge-main', 'bridge-street', 'bridge-trunk', 'bridge-motorway'],
-    'cartodem': ['chennai-cartodem'],
-    'buildings': ['building'],
-    'road-subways': ['tunnel-motorway', 'tunnel-trunk', 'tunnel-main', 'tunnel-street'],
-    'chennai-relief-camps': ['chennai-relief-camps'],
-    'chennai-relief-camps-22nov': ['chennai-relief-camps-22nov'],
-    'chennai-water-logged-points': ['chennai-water-logged-points'],
-    'road': [
-        'road-main',
-        'road-construction',
-        'road-rail',
-        'road-motorway',
-        'road-trunk',
-        'road-street',
-        'road-service-driveway',
-        'road-path',
-        'tunnel-motorway',
-        'tunnel-trunk',
-        'tunnel-main',
-        'tunnel-street',
-        'bridge-main',
-        'bridge-street',
-        'bridge-trunk',
-        'bridge-motorway',
-        'road-street_limited',
-        'aeroway-runway',
-        'aeroway-taxiway',
-        'road-rail',
-        'bridge-rail'
-    ]
-};
-
 map.on('style.load', function (e) {
 
     var selectedRoadsSource = new mapboxgl.GeoJSONSource({});

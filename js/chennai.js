@@ -174,38 +174,39 @@ function addSourcesAndLayers() {
   });
 }
 
-  //Popups on click
-    map.on('click', function (e) {
-        map.featuresAt(e.point, {
-            radius: 10,
-            layer: ['chennai-relief-camps', 'chennai-relief-camps-22nov'],
-            includeGeometry: true
-        }, function (err, features) {
-            if (err) throw err;
+function selectRoad(data) {
+  var addedRoads = [];
+  var addedFeatures = [];
 
-            if (features.length > 0) {
-                var popupHTML = '<h5>' + features[0].properties.Name + '</h5><p>' + $('[data-map-layer=' + features[0].layer.id + ']').html() + '</p>';
-                var popup = new mapboxgl.Popup()
-                                        .setLngLat(features[0].geometry.coordinates)
-                                        .setHTML(popupHTML)
-                                        .addTo(map);
-            }
-        });
-    });
+  //Dump Data
+  window.dump = JSON.stringify(data);
 
-  // Update map legend from styles
-  $('[data-map-layer]').each(function () {
-      // Get the color of the feature from the map
-      var obj = $(this).attr('data-map-layer');
-
-      try {
-          var color = map.getPaintProperty(obj, 'circle-color');
-          // Set the legend color
-          $(this).prepend('<div class="map-legend-circle" style="background:"' + array2rgb(color) + '></div>');
-      } catch (e) {
-          return;
-      }
+  data.features.forEach(function(feature) {
+    addedRoads.push(feature.properties.id);
+    addedFeatures.push(feature);
   });
+
+  map.on('click', function (e) {
+    if (map.getZoom() >= 15) {
+      map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
+        if (err) throw err;
+        //feature exists in the selected-roads layer, so unselect the road
+        if (features.length) {
+          $('#map').toggleClass('loading');
+          deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features);
+        } else {
+        //If road is not present in the `selected-roads` layer,
+        //check the glFeatures layer to see if the road is present.
+        //If yes, add it to the `selected-roads` layer
+          map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: MAP_LAYERS['road']}, function (err, features) {
+            if (err) throw err;
+            addRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features);
+          });
+        }
+      });
+    }
+  });
+}
 
     function playWithMap(data) {
         var addedRoads = [];

@@ -138,25 +138,41 @@ function addRoad (data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, featur
   });
 }
 
-  //Live query
-    map.on('mousemove', function (e) {
-        map.featuresAt(e.point, {
-            radius: 4
-        }, function (err, features) {
-            if (err) throw err;
+function addSourcesAndLayers() {
+  SELECTED_ROADS_SOURCE = new mapboxgl.GeoJSONSource({});
+  map.addSource('selected-roads', SELECTED_ROADS_SOURCE);
+  map.addLayer({
+    'id': 'selected-roads',
+    'type': 'line',
+    'source': 'selected-roads',
+    'interactive': true,
+    'paint': {
+      'line-color': 'rgba(255,5,230,1)',
+      'line-width': 3,
+      'line-opacity': 0.6
+    }
+  }, 'road-waterlogged');
 
-            var featuresList = '';
-            if (features[0]) {
-                if (features[0].properties.class)
-                    featuresList += features[0].properties.class + ' ';
-                if (features[0].properties.type)
-                    featuresList += features[0].properties.type + '';
-                if (features[0].properties.name)
-                    featuresList += '- ' + features[0].properties.name;
-                $('#map-query').html(featuresList);
-            }
-        });
-    });
+  map.addSource('terrain-data', {
+    type: 'vector',
+    url: 'mapbox://mapbox.mapbox-terrain-v2'
+  });
+  map.addLayer({
+    'id': 'terrain-data',
+    'type': 'line',
+    'source': 'terrain-data',
+    'source-layer': 'contour',
+    'layout': {
+      'line-join': 'round',
+      'line-cap': 'round'
+    },
+    'paint': {
+      'line-color': '#ff69b4',
+      'line-opacity': '0.3',
+      'line-width': 1
+    }
+  });
+}
 
   //Popups on click
     map.on('click', function (e) {

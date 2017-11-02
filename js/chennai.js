@@ -1,31 +1,28 @@
 var DATASET_ID = 'ciwm29xyd00082tmocm5l6osb';
 var DATASETS_BASE = 'https://api.mapbox.com/datasets/v1/chennaiflood/' + DATASET_ID + '/';
 var DATASETS_ACCESS_TOKEN = 'sk.eyJ1IjoiY2hlbm5haWZsb29kIiwiYSI6ImNpaG9mOGljdTBibmN0aGo3NWR6Y3Q0aXQifQ.X73YugnJDlhZEhxz2X86WA';
+var PUBLIC_ACCESS_TOKEN = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
+var STYLESHEET = 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa';
 var MAP_LAYERS;
 var MAP_LOCATIONS;
 var SELECTED_ROADS_SOURCE;
 
 // Simple map
-mapboxgl.accessToken = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
+mapboxgl.accessToken = PUBLIC_ACCESS_TOKEN;
 var map = new mapboxgl.Map({
-  container: 'map', // container id
-  style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
+  container: 'map',
+  style: STYLESHEET,
   hash: true
 });
 
-//Supress Tile errors
 map.off('tile.error', map.onError);
-
-// Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.Navigation());
 
 map.on('style.load', function (e) {
 
   addSourcesAndLayers();
 
-  $('#feature-count').toggleClass('loading');
-
-  getFeatures();
+  getDataSet();
 
   map.on('click', function (e) {
     map.featuresAt(e.point, {
@@ -51,14 +48,16 @@ map.on('style.load', function (e) {
   });
 });
 
-function getFeatures(startID) {
+function getDataSet(startID) {
+  $('#feature-count').toggleClass('loading');
   var url = DATASETS_BASE + 'features';
+
   var params = {
     'access_token': DATASETS_ACCESS_TOKEN
   };
-  if (startID) {
-      params.start = startID;
-  }
+
+  if (startID) params.start = startID;
+
   $.get(url, params, function (data) {
     var features = {
         type: 'FeatureCollection'
@@ -69,17 +68,19 @@ function getFeatures(startID) {
     features.features = data.features;
 
     var lastFeatureID = data.features[data.features.length - 1].id;
-    getFeatures(lastFeatureID);
+    getDataSet(lastFeatureID);
 
     SELECTED_ROADS_SOURCE.setData(features);
 
     updateFeatureCount(features);
-    $('#feature-count').toggleClass('loading');
+
     selectRoad(features);
   });
+  $('#feature-count').toggleClass('loading');
 }
 
 function deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
+  $('#map').toggleClass('loading');
   var url = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + DATASETS_ACCESS_TOKEN;
   var index = addedRoads.indexOf(features[0].properties.id);
   $.ajax({
@@ -101,6 +102,7 @@ function deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, feat
 }
 
 function addRoad (data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
+  $('#map').toggleClass('loading');
   var tempObj = {
     type: 'Feature',
     geometry: features[0].geometry,
@@ -110,9 +112,6 @@ function addRoad (data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, featur
   tempObj.id = md5(JSON.stringify(tempObj));
 
   var url = DATASETS_BASE + 'features/' + tempObj.id + '?access_token=' + DATASETS_ACCESS_TOKEN;
-
-  $('#map').toggleClass('loading');
-
   $.ajax({
     method: 'PUT',
     url: url,
@@ -136,6 +135,7 @@ function addRoad (data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, featur
 }
 
 function addSourcesAndLayers() {
+  $('#feature-count').toggleClass('loading');
   SELECTED_ROADS_SOURCE = new mapboxgl.GeoJSONSource({});
   map.addSource('selected-roads', SELECTED_ROADS_SOURCE);
   map.addLayer({
@@ -169,6 +169,7 @@ function addSourcesAndLayers() {
       'line-width': 1
     }
   });
+  $('#feature-count').toggleClass('loading');
 }
 
 function selectRoad(data) {
@@ -189,7 +190,6 @@ function selectRoad(data) {
         if (err) throw err;
         //feature exists in the selected-roads layer, so unselect the road
         if (features.length) {
-          $('#map').toggleClass('loading');
           deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features);
         } else {
         //If road is not present in the `selected-roads` layer,
@@ -221,7 +221,9 @@ function loadInfo(err, features) {
 }
 //Update feature count
 function updateFeatureCount(data) {
+  $('#feature-count').toggleClass('loading');
   $('#feature-count').html(data.features.length);
+  $('#feature-count').toggleClass('loading');
 }
 
 function array2rgb(color) {

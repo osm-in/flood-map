@@ -78,31 +78,32 @@ function mapHighlightReset() {
 
 // Toggle visibility of a layer collection using opacity
 function mapToggle(item) {
-
-  var collectionName = $(item).attr('data-map-layer');
+  var layer = $(item).attr('data-map-layer');
 
   // Loop through collection and toggle visibility
-  for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-    var obj = mapLayerCollection[collectionName][i];
+  MAP_LAYERS[layer].forEach(function(mapLayer) {
     var prop;
-
-    // Choose an appropriate property to change
-    if (map.getLayer(obj).type == 'raster')
-      prop = 'raster-opacity';
-    if (map.getLayer(obj).type == 'fill')
-      prop = 'fill-opacity';
-    if (map.getLayer(obj).type == 'line')
-      prop = 'line-opacity';
-    if (map.getLayer(obj).type == 'circle')
-      prop = 'circle-opacity';
+    switch(map.getLayer(mapLayer).type) {
+      case 'raster':
+        prop = 'raster-opacity';
+        break;
+      case 'fill':
+        prop = 'fill-opacity';
+        break;
+      case 'line':
+        prop = 'line-opacity';
+        break;
+      case 'circle':
+        prop = 'circle-opacity';
+        break;
+    }
     try {
-      map.setPaintProperty(obj, prop, !map.getPaintProperty(obj, prop));
+      map.setPaintProperty(mapLayer, prop, !map.getPaintProperty(mapLayer, prop));
     } catch (e) {
-      map.setPaintProperty(obj, prop, 0);
+      map.setPaintProperty(mapLayer, prop, 0);
     }
 
-  }
+  });
 
 };
 

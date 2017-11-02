@@ -76,33 +76,67 @@ function getFeatures(startID) {
 
     updateFeatureCount(features);
     $('#feature-count').toggleClass('loading');
-    function getFeatures(startID) {
-        var url = DATASETS_BASE + 'features';
-        var params = {
-            'access_token': datasetsAccessToken
-        };
-        if (startID) {
-            params.start = startID;
-        }
-        $.getJSON(url, params, function (data) {
-            if (data.features.length > 0) {
-                data.features.forEach(function (feature) {
-                    feature.properties.id = feature.id;
-                });
-                featuresGeoJSON.features = featuresGeoJSON.features.concat(data.features);
-                var lastFeatureID = data.features[data.features.length - 1].id;
-                getFeatures(lastFeatureID);
-                selectedRoadsSource.setData(featuresGeoJSON);
-                updateFeatureCount(featuresGeoJSON);
-            } else {
-              updateFeatureCount(featuresGeoJSON);
-              $('#feature-count').toggleClass('loading');
-                playWithMap(featuresGeoJSON);
-            }
-        });
-    }
+    selectRoad(features);
+  });
+}
 
-    getFeatures(null);
+function deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
+  console.log(data);
+  var url = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + DATASETS_ACCESS_TOKEN;
+  var index = addedRoads.indexOf(features[0].properties.id);
+  $.ajax({
+    method: 'DELETE',
+    url: url,
+    contentType: 'application/json',
+    success: function () {
+      $('#map').toggleClass('loading');
+      data['features'].splice(index, 1);
+      addedRoads.splice(index, 1);
+      addedFeatures.splice(index, 1);
+      SELECTED_ROADS_SOURCE.setData(data);
+      updateFeatureCount(data);
+    },
+    error: function () {
+      $('#map').toggleClass('loading');
+    }
+  });
+}
+
+function addRoad (data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
+  console.log(data);
+  var tempObj = {
+    type: 'Feature',
+    geometry: features[0].geometry,
+    properties: features[0].properties,
+  };
+  tempObj.properties['is_flooded'] = true;
+  tempObj.id = md5(JSON.stringify(tempObj));
+
+  var url = DATASETS_BASE + 'features/' + tempObj.id + '?access_token=' + DATASETS_ACCESS_TOKEN;
+
+  $('#map').toggleClass('loading');
+
+  $.ajax({
+    method: 'PUT',
+    url: url,
+    data: JSON.stringify(tempObj),
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function (response) {
+      $('#map').toggleClass('loading');
+      tempObj.id = response.id;
+      tempObj.properties.id = response.id;
+      addedFeatures.push(tempObj);
+      data.features.push(tempObj);
+      addedRoads.push(features[0].properties.osm_id);
+      SELECTED_ROADS_SOURCE.setData(data);
+      updateFeatureCount(data);
+    },
+    error: function () {
+      $('#map').toggleClass('loading');
+    }
+  });
+}
 
   //Live query
     map.on('mousemove', function (e) {

@@ -208,18 +208,20 @@ function selectRoad(data) {
   });
 }
 
-    function playWithMap(data) {
-        var addedRoads = [];
-        var addedFeatures = [];
+function loadInfo(err, features) {
+  if (err) throw err;
 
-        //Dump Data
-        window.dump = JSON.stringify(data);
+  if (features.length > 0) {
+    var popupHTML = '<h5>' + features[0].properties.Name + '</h5><p>' + $('[data-map-layer=' + features[0].layer.id + ']').html() + '</p>';
 
-        for (var i = 0; i < data.features.length; i++) {
-            addedRoads.push(data.features[i].properties.id);
-            addedFeatures.push(data.features[i]);
-        }
+    var popup = new mapboxgl.Popup();
 
+    popup
+    .setLngLat(features[0].geometry.coordinates)
+    .setHTML(popupHTML)
+    .addTo(map);
+  }
+}
 
         map.on('click', function (e) {
             if (map.getZoom() >= 15) {

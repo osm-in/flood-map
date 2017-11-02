@@ -52,7 +52,6 @@ map.on('style.load', function (e) {
 });
 
 function getFeatures(startID) {
-  console.log('*************** getFeatures')
   var url = DATASETS_BASE + 'features';
   var params = {
     'access_token': DATASETS_ACCESS_TOKEN
@@ -81,7 +80,6 @@ function getFeatures(startID) {
 }
 
 function deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
-  console.log(data);
   var url = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + DATASETS_ACCESS_TOKEN;
   var index = addedRoads.indexOf(features[0].properties.id);
   $.ajax({
@@ -103,7 +101,6 @@ function deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, feat
 }
 
 function addRoad (data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
-  console.log(data);
   var tempObj = {
     type: 'Feature',
     geometry: features[0].geometry,

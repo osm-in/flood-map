@@ -47,12 +47,9 @@ function mapHighlight(item) {
 // Reset style of a collection to default
 function mapHighlightReset() {
   for (var layer in MAP_LAYERS) {
-    console.log(layer);
     // Loop through collection and and reset properties to stored defaults
     MAP_LAYERS[layer].forEach(function (mapLayer) {
       var prop;
-      console.log(mapLayer);
-      console.log(map.getLayer(mapLayer));
       switch(map.getLayer(mapLayer).type) {
         case 'fill':
           prop = 'fill-color';

@@ -25,21 +25,28 @@ map.on('style.load', function (e) {
 
   $('#feature-count').toggleClass('loading');
 
-    map.addLayer({
-        'id': 'terrain-data',
-        'type': 'line',
-        'source': 'terrain-data',
-        'source-layer': 'contour',
-        'layout': {
-            'line-join': 'round',
-            'line-cap': 'round'
-        },
-        'paint': {
-            'line-color': '#ff69b4',
-            'line-opacity': '0.3',
-            'line-width': 1
-        }
-    });
+  getFeatures();
+
+  map.on('click', function (e) {
+    map.featuresAt(e.point, {
+        radius: 10,
+        layer: ['chennai-relief-camps', 'chennai-relief-camps-22nov'],
+        includeGeometry: true
+    }, loadInfo);
+  });
+
+  // Update map legend from styles
+  $('[data-map-layer]').each(function () {
+    // Get the color of the feature from the map
+    var obj = $(this).attr('data-map-layer');
+
+    try {
+      var color = map.getPaintProperty(obj, 'circle-color');
+      // Set the legend color
+      $(this).prepend('<div class="map-legend-circle" style="background:"' + array2rgb(color) + '></div>');
+    } catch (e) {
+      return;
+    }
 
   // Select flooded roads
     var featuresGeoJSON = {

@@ -110,7 +110,6 @@ function mapToggle(item) {
 //Location functions
 // Set pitch and fly to location
 function mapLocate(location) {
-  map.setPitch(mapLocation[location].pitch);
-  map.flyTo(mapLocation[location]);
-  if(location == "reset"){}
+  map.setPitch(MAP_LOCATIONS[location].pitch);
+  map.flyTo(MAP_LOCATIONS[location]);
 }

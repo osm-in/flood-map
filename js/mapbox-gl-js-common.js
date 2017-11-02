@@ -14,32 +14,33 @@ function loadLayers() {
 
 // Highlight a layer collection
 function mapHighlight(item) {
-
-  var collectionName = $(item).attr('data-map-layer');
+  var layer = $(item).attr('data-map-layer');
   var color = $(item).attr('data-map-layer-highlight');
 
   // Loop through collection and store defaults before changing them
-  for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-    var obj = mapLayerCollection[collectionName][i];
-
-    // Choose an appropriate property to change
-    if (map.getLayer(obj).type == 'raster')
-      prop = 'raster-opacity';
-    if (map.getLayer(obj).type == 'fill')
-      prop = 'fill-color';
-    if (map.getLayer(obj).type == 'line')
-      prop = 'line-color';
-    if (map.getLayer(obj).type == 'circle')
-      prop = 'circle-color';
-
+  MAP_LAYERS[layer].forEach(function(mapLayer) {
     var propObj = {};
-    propObj[prop] = map.getPaintProperty(obj, prop);
 
-    defaultStyle[obj] = propObj;
-    map.setPaintProperty(obj, prop, color);
+    switch(map.getLayer(mapLayer).type) {
+      case 'raster':
+        prop = 'raster-opacity';
+        break;
+      case 'fill':
+        prop = 'fill-color';
+        break;
+      case 'line':
+        prop = 'line-color';
+        break;
+      case 'circle':
+        prop = 'circle-color';
+        break;
+    }
+    propObj[prop] = map.getPaintProperty(mapLayer, prop);
 
-  }
+    defaultStyle[mapLayer] = propObj;
+    map.setPaintProperty(mapLayer, prop, color);
+
+  });
 
 };
 

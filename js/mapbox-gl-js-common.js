@@ -2,6 +2,16 @@
 
 var defaultStyle = {};
 
+loadLayers();
+function loadLayers() {
+  $.get('../json/mapLayers.json', function (data) {
+    MAP_LAYERS = data;
+  });
+  $.get('../json/mapLocations.json', function(data) {
+    MAP_LOCATIONS = data;
+  });
+}
+
 // Highlight a layer collection
 function mapHighlight(item) {
 

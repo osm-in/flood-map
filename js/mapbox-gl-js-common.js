@@ -46,30 +46,32 @@ function mapHighlight(item) {
 
 // Reset style of a collection to default
 function mapHighlightReset() {
-
-  for (var collectionName in mapLayerCollection) {
+  for (var layer in MAP_LAYERS) {
+    console.log(layer);
     // Loop through collection and and reset properties to stored defaults
-    for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-      var obj = mapLayerCollection[collectionName][i];
+    MAP_LAYERS[layer].forEach(function (mapLayer) {
       var prop;
-
-      // Choose an appropriate property to change
-      if (map.getLayer(obj).type == 'fill')
-        prop = 'fill-color';
-      if (map.getLayer(obj).type == 'line')
-        prop = 'line-color';
-      if (map.getLayer(obj).type == 'circle')
-        prop = 'circle-color';
+      console.log(mapLayer);
+      console.log(map.getLayer(mapLayer));
+      switch(map.getLayer(mapLayer).type) {
+        case 'fill':
+          prop = 'fill-color';
+          break;
+        case 'line':
+          prop = 'line-color';
+          break;
+        case 'circle':
+          prop = 'circle-color';
+          break;
+      }
 
       // Revert to default style if known
-      try{
-      if (defaultStyle[obj][prop])
-        map.setPaintProperty(obj, prop, defaultStyle[obj][prop]);
-      }
-      catch(e){}
+      try {
+        if (defaultStyle[mapLayer][prop])
+          map.setPaintProperty(mapLayer, prop, defaultStyle[mapLayer][prop]);
+      } catch(e){}
 
-    }
+    });
   }
 
 };

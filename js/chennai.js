@@ -222,106 +222,26 @@ function loadInfo(err, features) {
     .addTo(map);
   }
 }
-
-        map.on('click', function (e) {
-            if (map.getZoom() >= 15) {
-                //Check if the feature clicked on is in the selected Roads Layer.
-                //If yes, UNSELECT the road
-                map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
-                    if (err) throw err;
-
-                    if (features.length > 0) {
-
-                        $('#map').toggleClass('loading');
-                        var saveURL = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + datasetsAccessToken;
-
-                        var index = addedRoads.indexOf(features[0].properties.id);
-                        $.ajax({
-                            'method': 'DELETE',
-                            'url': saveURL,
-                            'contentType': 'application/json',
-                            'success': function () {
-                                $('#map').toggleClass('loading');
-                                data['features'].splice(index, 1);
-                                addedRoads.splice(index, 1);
-                                addedFeatures.splice(index, 1);
-                                selectedRoadsSource.setData(data);
-                                updateFeatureCount(data);
-                            },
-                            'error': function () {
-                                $('#map').toggleClass('loading');
-                            }
-                        });
-                    } else {
-                        //If road is not present in the `selected-roads` layer,
-                        //check the glFeatures layer to see if the road is present.
-                        //If yes,ADD it to the `selected-roads` layer
-                        map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: mapLayerCollection['road']}, function (err, glFeatures) {
-                            if (err) throw err;
-
-                            var tempObj = {
-                                'type': 'Feature'
-                            };
-
-                            tempObj.geometry = glFeatures[0].geometry;
-                            tempObj.properties = glFeatures[0].properties;
-                            tempObj.properties['is_flooded'] = true;
-                            tempObj.properties['timestamp'] = Date.now();
-
-                            $('#map').toggleClass('loading');
-
-                            var id = md5(JSON.stringify(tempObj));
-                            tempObj.id = id;
-                            var saveURL = DATASETS_BASE + 'features/' + id + '?access_token=' + datasetsAccessToken;
-
-                            $.ajax({
-                                'method': 'PUT',
-                                'url': saveURL,
-                                'data': JSON.stringify(tempObj),
-                                'dataType': 'json',
-                                'contentType': 'application/json',
-                                'success': function (response) {
-                                    $('#map').toggleClass('loading');
-                                    tempObj.id = response.id;
-                                    tempObj.properties.id = response.id;
-                                    addedFeatures.push(tempObj);
-                                    data.features.push(tempObj);
-                                    addedRoads.push(glFeatures[0].properties.osm_id);
-                                    selectedRoadsSource.setData(data);
-                                    updateFeatureCount(data);
-                                },
-                                'error': function () {
-                                    $('#map').toggleClass('loading');
-                                }
-                            });
-                        });
-                    }
-                });
-            }
-        });
-    }
-});
-  //Update feature count
+//Update feature count
 function updateFeatureCount(data) {
-    var count = data.features.length;
-    $('#feature-count').html(count);
+  $('#feature-count').html(data.features.length);
 }
 
 function array2rgb(color) {
-    // Combine and return the values
-    return 'rgba(' + color.map(function (x) {
-        return x * 255;
-    }).join() + ')';
+  // Combine and return the values
+  return 'rgba(' + color.map(function (x) {
+    return x * 255;
+  }).join() + ')';
 }
 
 $(function () {
-    $('#sidebar').mCustomScrollbar({
-        theme: 'rounded-dots',
-        scrollInertia: 100,
-        callbacks: {
-            onInit: function () {
-                $('#sidebar').css('overflow', 'auto');
-            }
-        }
-    });
+  $('#sidebar').mCustomScrollbar({
+    theme: 'rounded-dots',
+    scrollInertia: 100,
+    callbacks: {
+      onInit: function () {
+        $('#sidebar').css('overflow', 'auto');
+      }
+    }
+  });
 });

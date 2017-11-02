@@ -8,11 +8,10 @@ var SELECTED_ROADS_SOURCE;
 // Simple map
 mapboxgl.accessToken = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
 var map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
-    hash: true
+  container: 'map', // container id
+  style: 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa', //stylesheet location
+  hash: true
 });
-mapLocate('reset');
 
 //Supress Tile errors
 map.off('tile.error', map.onError);

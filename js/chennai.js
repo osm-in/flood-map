@@ -1,4 +1,6 @@
 // Simple map
+var SELECTED_ROADS_SOURCE;
+
 mapboxgl.accessToken = PUBLIC_ACCESS_TOKEN;
 var map = new mapboxgl.Map({
   container: 'map',

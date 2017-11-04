@@ -69,7 +69,7 @@ function getDataSet(startID) {
   $('#feature-count').toggleClass('loading');
 }
 
-function deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
+function deleteRoad(data, addedRoads, addedFeatures, features) {
   $('#map').toggleClass('loading');
   var url = DATASETS_BASE + 'features/' + features[0].properties.id + '?access_token=' + DATASETS_ACCESS_TOKEN;
   var index = addedRoads.indexOf(features[0].properties.id);
@@ -91,7 +91,7 @@ function deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, feat
   });
 }
 
-function addRoad (data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features) {
+function addRoad (data, addedRoads, addedFeatures, features) {
   $('#map').toggleClass('loading');
   var tempObj = {
     type: 'Feature',
@@ -179,11 +179,11 @@ function selectionHandler(data) {
       map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
         if (err) throw err;
         if (features.length) {
-          deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features);
+          deleteRoad(data, addedRoads, addedFeatures, features);
         } else {
           map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: MAP_LAYERS['road']}, function (err, features) {
             if (err) throw err;
-            addRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features);
+            addRoad(data, addedRoads, addedFeatures, features);
           });
         }
       });

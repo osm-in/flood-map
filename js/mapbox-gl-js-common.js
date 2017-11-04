@@ -10,7 +10,7 @@ function mapHighlight(item) {
   // Loop through collection and store defaults before changing them
   MAP_LAYERS[layer].forEach(function(mapLayer) {
     var propObj = {};
-
+    var prop;
     switch(map.getLayer(mapLayer).type) {
       case 'raster':
         prop = 'raster-opacity';

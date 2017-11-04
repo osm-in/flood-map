@@ -11,7 +11,6 @@ You are encouraged to make use of the collected data for further analysis. Downl
 
 - [11AM Dec 2](https://github.com/osm-in/flood-map/blob/gh-pages/data/chennai-flooded-streets-Dec2.geojson)
 
-
 ### Data Sources
 - **Base Layer** - [OpenStreetMap](http://osm.org)
 - **Vulnerable and Inundated Areas**
@@ -25,3 +24,12 @@ You are encouraged to make use of the collected data for further analysis. Downl
 #### Sources
 - [HTML5 boilerplate](https://github.com/h5bp/html5-boilerplate)
 - [Mapbox base.css](https://www.mapbox.com/base/)
+
+#### Help us make a better map.
+
+All of us believe in the open source ideology, and we would love your help in making the map data and source code better! Some ways in which you can contribute:
+* Please take a look at our open issues, and submit PRs that can fix those issues. You can test the source code on your local machines, by
+  * `npm install -g serve`
+  * `serve -p 3001`
+  * Running the map on your browser at `localhost:3001`
+* If you have additional geospatial data related to the Chennai floods, please share them with us so we can add it as a layer to our base map. For example, relief centers, additional crowd-sourced data that could have valuable information etc. You can open an issue for the same in this repository.

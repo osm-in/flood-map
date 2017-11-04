@@ -18,7 +18,7 @@ map.on('style.load', function (e) {
   map.on('click', function (e) {
     map.featuresAt(e.point, {
         radius: 10,
-        layer: ['chennai-relief-camps', 'chennai-relief-camps-22nov'],
+        layer: LOAD_INFO_LAYERS,
         includeGeometry: true
     }, loadInfo);
   });

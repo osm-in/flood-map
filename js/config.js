@@ -4,3 +4,4 @@ var DATASETS_ACCESS_TOKEN = 'sk.eyJ1IjoiY2hlbm5haWZsb29kIiwiYSI6ImNpaG9mOGljdTBi
 var PUBLIC_ACCESS_TOKEN = 'pk.eyJ1IjoicGxhbmVtYWQiLCJhIjoiemdYSVVLRSJ9.g3lbg_eN0kztmsfIPxa9MQ';
 var STYLESHEET = 'mapbox://styles/planemad/cih4qzr0w0012awltzvpie7qa';
 var SELECTED_ROADS_SOURCE;
+var LOAD_INFO_LAYERS = ['chennai-relief-camps', 'chennai-relief-camps-22nov'];

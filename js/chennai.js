@@ -35,7 +35,6 @@ map.on('style.load', function (e) {
     } catch (e) {
       return;
     }
-
   });
 });
 
@@ -179,13 +178,9 @@ function selectRoad(data) {
     if (map.getZoom() >= 15) {
       map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
         if (err) throw err;
-        //feature exists in the selected-roads layer, so unselect the road
         if (features.length) {
           deleteRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features);
         } else {
-        //If road is not present in the `selected-roads` layer,
-        //check the glFeatures layer to see if the road is present.
-        //If yes, add it to the `selected-roads` layer
           map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: MAP_LAYERS['road']}, function (err, features) {
             if (err) throw err;
             addRoad(data, addedRoads, addedFeatures, SELECTED_ROADS_SOURCE, features);

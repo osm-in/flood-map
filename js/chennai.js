@@ -183,7 +183,9 @@ function selectionHandler(data) {
         } else {
           map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: MAP_LAYERS['road']}, function (err, features) {
             if (err) throw err;
-            addRoad(data, addedRoads, addedFeatures, features);
+            if (features.length) {
+              addRoad(data, addedRoads, addedFeatures, features);
+            }
           });
         }
       });

@@ -4,99 +4,99 @@ var defaultStyle = {};
 
 // Highlight a layer collection
 function mapHighlight(item) {
-
-  var collectionName = $(item).attr('data-map-layer');
+  var layer = $(item).attr('data-map-layer');
   var color = $(item).attr('data-map-layer-highlight');
 
   // Loop through collection and store defaults before changing them
-  for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-    var obj = mapLayerCollection[collectionName][i];
-
-    // Choose an appropriate property to change
-    if (map.getLayer(obj).type == 'raster')
-      prop = 'raster-opacity';
-    if (map.getLayer(obj).type == 'fill')
-      prop = 'fill-color';
-    if (map.getLayer(obj).type == 'line')
-      prop = 'line-color';
-    if (map.getLayer(obj).type == 'circle')
-      prop = 'circle-color';
-
+  MAP_LAYERS[layer].forEach(function(mapLayer) {
     var propObj = {};
-    propObj[prop] = map.getPaintProperty(obj, prop);
+    var prop;
+    switch(map.getLayer(mapLayer).type) {
+      case 'raster':
+        prop = 'raster-opacity';
+        break;
+      case 'fill':
+        prop = 'fill-color';
+        break;
+      case 'line':
+        prop = 'line-color';
+        break;
+      case 'circle':
+        prop = 'circle-color';
+        break;
+    }
+    propObj[prop] = map.getPaintProperty(mapLayer, prop);
 
-    defaultStyle[obj] = propObj;
-    map.setPaintProperty(obj, prop, color);
+    defaultStyle[mapLayer] = propObj;
+    map.setPaintProperty(mapLayer, prop, color);
 
-  }
+  });
 
 };
 
 // Reset style of a collection to default
 function mapHighlightReset() {
-
-  for (var collectionName in mapLayerCollection) {
+  for (var layer in MAP_LAYERS) {
     // Loop through collection and and reset properties to stored defaults
-    for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-      var obj = mapLayerCollection[collectionName][i];
+    MAP_LAYERS[layer].forEach(function (mapLayer) {
       var prop;
-
-      // Choose an appropriate property to change
-      if (map.getLayer(obj).type == 'fill')
-        prop = 'fill-color';
-      if (map.getLayer(obj).type == 'line')
-        prop = 'line-color';
-      if (map.getLayer(obj).type == 'circle')
-        prop = 'circle-color';
+      switch(map.getLayer(mapLayer).type) {
+        case 'fill':
+          prop = 'fill-color';
+          break;
+        case 'line':
+          prop = 'line-color';
+          break;
+        case 'circle':
+          prop = 'circle-color';
+          break;
+      }
 
       // Revert to default style if known
-      try{
-      if (defaultStyle[obj][prop])
-        map.setPaintProperty(obj, prop, defaultStyle[obj][prop]);
-      }
-      catch(e){}
+      try {
+        if (defaultStyle[mapLayer][prop])
+          map.setPaintProperty(mapLayer, prop, defaultStyle[mapLayer][prop]);
+      } catch(e){}
 
-    }
+    });
   }
 
 };
 
 // Toggle visibility of a layer collection using opacity
 function mapToggle(item) {
-
-  var collectionName = $(item).attr('data-map-layer');
+  var layer = $(item).attr('data-map-layer');
 
   // Loop through collection and toggle visibility
-  for (var i = 0; i < mapLayerCollection[collectionName].length; i++) {
-
-    var obj = mapLayerCollection[collectionName][i];
+  MAP_LAYERS[layer].forEach(function(mapLayer) {
     var prop;
-
-    // Choose an appropriate property to change
-    if (map.getLayer(obj).type == 'raster')
-      prop = 'raster-opacity';
-    if (map.getLayer(obj).type == 'fill')
-      prop = 'fill-opacity';
-    if (map.getLayer(obj).type == 'line')
-      prop = 'line-opacity';
-    if (map.getLayer(obj).type == 'circle')
-      prop = 'circle-opacity';
+    switch(map.getLayer(mapLayer).type) {
+      case 'raster':
+        prop = 'raster-opacity';
+        break;
+      case 'fill':
+        prop = 'fill-opacity';
+        break;
+      case 'line':
+        prop = 'line-opacity';
+        break;
+      case 'circle':
+        prop = 'circle-opacity';
+        break;
+    }
     try {
-      map.setPaintProperty(obj, prop, !map.getPaintProperty(obj, prop));
+      map.setPaintProperty(mapLayer, prop, !map.getPaintProperty(mapLayer, prop));
     } catch (e) {
-      map.setPaintProperty(obj, prop, 0);
+      map.setPaintProperty(mapLayer, prop, 0);
     }
 
-  }
+  });
 
 };
 
 //Location functions
 // Set pitch and fly to location
 function mapLocate(location) {
-  map.setPitch(mapLocation[location].pitch);
-  map.flyTo(mapLocation[location]);
-  if(location == "reset"){}
+  map.setPitch(MAP_LOCATIONS[location].pitch);
+  map.flyTo(MAP_LOCATIONS[location]);
 }

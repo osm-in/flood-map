@@ -101,6 +101,7 @@ function addRoad (data, addedRoads, addedFeatures, features) {
     properties: features[0].properties,
   };
   tempObj.properties['is_flooded'] = true;
+  tempObj.properties['timestamp'] = Date.now();
   tempObj.id = md5(JSON.stringify(tempObj));
 
   var url = DATASETS_BASE + 'features/' + tempObj.id + '?access_token=' + DATASETS_ACCESS_TOKEN;

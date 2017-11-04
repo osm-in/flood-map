@@ -1,4 +1,4 @@
-{
+var MAP_LAYERS = {
   "water": ["water", "waterway-river-canal", "waterway-small"],
   "road-bridges": ["bridge-main", "bridge-street", "bridge-trunk", "bridge-motorway"],
   "cartodem": ["chennai-cartodem"],
@@ -30,4 +30,4 @@
     "road-rail",
     "bridge-rail"
   ]
-}
+};

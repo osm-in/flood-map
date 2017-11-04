@@ -1,4 +1,4 @@
-{
+var MAP_LOCATIONS = {
   "reset": {
     "center": [80.2, 13.00],
     "zoom": 11,
@@ -48,4 +48,4 @@
     "pitch": 70,
     "bearing": -10
   }
-}
+};

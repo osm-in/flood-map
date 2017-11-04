@@ -64,7 +64,7 @@ function getDataSet(startID) {
 
     updateFeatureCount(features);
 
-    selectRoad(features);
+    selectionHandler(features);
   });
   $('#feature-count').toggleClass('loading');
 }
@@ -162,7 +162,7 @@ function addSourcesAndLayers() {
   $('#feature-count').toggleClass('loading');
 }
 
-function selectRoad(data) {
+function selectionHandler(data) {
   var addedRoads = [];
   var addedFeatures = [];
 
@@ -205,7 +205,7 @@ function loadInfo(err, features) {
     .addTo(map);
   }
 }
-//Update feature count
+
 function updateFeatureCount(data) {
   $('#feature-count').toggleClass('loading');
   $('#feature-count').html(data.features.length);

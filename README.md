@@ -9,7 +9,7 @@ The flooded streets layer is contributed by the public. Contributions are anonym
 #### Data dump
 You are encouraged to make use of the collected data for further analysis. Download the latest flooded streets layer as a geojson using [this Ajax request](https://github.com/osm-in/flood-map/blob/gh-pages/js/chennai.js#L145-L175).
 
-- [11AM Dec 2](https://github.com/osm-in/flood-map/blob/gh-pages/data/chennai-flooded-streets-Dec2.geojson)
+- [11AM Dec 2, 2015](https://github.com/osm-in/flood-map/blob/gh-pages/data/chennai-flooded-streets-Dec2.geojson)
 
 ### Data Sources
 - **Base Layer** - [OpenStreetMap](http://osm.org)

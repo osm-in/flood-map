@@ -25,6 +25,11 @@ You are encouraged to make use of the collected data for further analysis. Downl
 - [HTML5 boilerplate](https://github.com/h5bp/html5-boilerplate)
 - [Mapbox base.css](https://www.mapbox.com/base/)
 
+#### Tools
+* [Mapbox Studio](https://www.mapbox.com/studio)
+* [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/)
+* [Mapbox Dataset API](https://www.mapbox.com/api-documentation/#datasets)
+
 #### Help us make a better map.
 
 All of us believe in the open source ideology, and we would love your help in making the map data and source code better! Some ways in which you can contribute:

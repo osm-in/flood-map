@@ -19,11 +19,11 @@ fetch('https://cloudflare.com/cdn-cgi/trace')
 .then(data => {
 
 userIpMatch = data.match(/ip=([\d.]+)/);
-userLocationMatch = data.match(/colo=([\d.]+)/);
+userLocationMatch = data.match(/colo=([A-Z]+)/);
+
 
 user.location = userLocationMatch ? userLocationMatch[1] : null;
 user.ip = userIpMatch ? userIpMatch[1] : null;
-
 })
 
 map.off('tile.error', map.onError);
@@ -202,14 +202,12 @@ function selectionHandler(data) {
     if (map.getZoom() >= 15) {
       let features;
       features = map.queryRenderedFeatures(e.point, { layers: ['selected-roads'] })
-      console.log(features)
       if (features.length) {
         deleteRoad(data, addedRoads, addedFeatures, features);
       } else {
         let features;
         features = map.queryRenderedFeatures(e.point, { layers: MAP_LAYERS['road'] });
         if (features.length) {
-          console.log(features)
           addRoad(data, addedRoads, addedFeatures, features);
         }
       }

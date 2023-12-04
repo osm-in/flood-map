@@ -9,8 +9,8 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
   <link href="https://www.mapbox.com/base/latest/base.css" rel="stylesheet">
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js'></script>
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css' rel='stylesheet' />
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/mCustomScrollbar.min.css">
@@ -37,81 +37,6 @@
     <img class="space-bottom1" src="https://cloud.githubusercontent.com/assets/126868/11440554/86851886-9529-11e5-9bf5-55abcc223057.gif">
     <p>This is a crowdsourced effort to map inundated roads in Chennai. Report a flooded street by zooming into the map and clicking it. All the data is <a href="https://github.com/osm-in/flood-map">open</a>.</p>
 
-
-    <div data-map='legend'>
-
-      <h5>Flood Layers</h5>
-
-      <div class="space-bottom1">
-        <ul>
-          <li>
-            <a data-map-layer='cartodem' href="#" class="truncate strong bloxk small" onclick='mapToggle(this);'>
-          Vulnerable and Inundated areas
-        </a>
-          </li>
-          
-          <li>
-            <a data-map-layer='chennai-relief-camps' href="#" class="truncate strong bloxk small " onclick='mapToggle(this);'>
-          Flood relief camps (Including closed)
-        </a>
-          </li>
-        </ul>
-      </div>
-
-      <h5>Affected Areas <a href="#" class="truncate strong bloxk small" onclick='mapLocate("reset");'>
-  (reset)
-</a></h5>
-
-      <div class="space-bottom1">
-        <ul>
-          <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("aminjikarai");'>
-        Aminjikarai
-      </a>
-          </li>
-          <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("velachery");'>
-        Velachery
-      </a>
-          </li>
-          <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("mudichur");'>
-        Mudichur
-      </a>
-          </li>
-          <li>
-            <a href="#" class="truncate strong bloxk small" onclick='mapLocate("omr");'>
-        Old Mahabalipuram Road
-      </a>
-          </li>
-        </ul>
-      </div>
-
-      <h5>Highlight <a href="#" class="truncate strong bloxk small" onclick='mapHighlightReset();'>
-  (reset)
-</a></h5>
-
-      <div class="space-bottom1">
-        <ul>
-          <li>
-            <a href="#" data-map-layer-highlight='red' data-map-layer='water' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
-          Waterbodies
-        </a>
-          </li>
-          <li>
-            <a href="#" data-map-layer-highlight='red' data-map-layer='road-subways' class="truncate strong bloxk small " onclick='mapHighlight(this);'>
-          Road Subways & Tunnels
-        </a>
-          </li>
-          <li>
-            <a href="#" data-map-layer-highlight='red' data-map-layer='road-bridges' class="truncate strong bloxk small" onclick='mapHighlight(this);'>
-          Road Flyovers & Bridges
-        </a>
-          </li>
-        </ul>
-      </div>
-
-    </div>
 
   </div>
 

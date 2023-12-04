@@ -9,7 +9,8 @@ var map = new mapboxgl.Map({
 });
 
 map.off('tile.error', map.onError);
-map.addControl(new mapboxgl.Navigation());
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
 
 map.on('style.load', function (e) {
 
@@ -17,13 +18,13 @@ map.on('style.load', function (e) {
 
   getDataSet();
 
-  map.on('click', function (e) {
-    map.featuresAt(e.point, {
-        radius: 10,
-        layer: LOAD_INFO_LAYERS,
-        includeGeometry: true
-    }, loadInfo);
-  });
+  // map.on('click', function (e) {
+  //   map.featuresAt(e.point, {
+  //       radius: 10,
+  //       layer: LOAD_INFO_LAYERS,
+  //       includeGeometry: true
+  //   }, loadInfo);
+  // });
 
   // Update map legend from styles
   $('[data-map-layer]').each(function () {
@@ -52,10 +53,10 @@ function getDataSet(startID) {
 
   $.get(url, params, function (data) {
     var features = {
-        type: 'FeatureCollection'
+      type: 'FeatureCollection'
     };
     data.features.forEach(function (feature) {
-        feature.properties.id = feature.id;
+      feature.properties.id = feature.id;
     });
     features.features = data.features;
 
@@ -95,7 +96,7 @@ function deleteRoad(data, addedRoads, addedFeatures, features) {
   });
 }
 
-function addRoad (data, addedRoads, addedFeatures, features) {
+function addRoad(data, addedRoads, addedFeatures, features) {
   $('#map').toggleClass('loading');
   var tempObj = {
     type: 'Feature',
@@ -131,19 +132,24 @@ function addRoad (data, addedRoads, addedFeatures, features) {
 
 function addSourcesAndLayers() {
   $('#feature-count').toggleClass('loading');
-  SELECTED_ROADS_SOURCE = new mapboxgl.GeoJSONSource({});
-  map.addSource('selected-roads', SELECTED_ROADS_SOURCE);
+
+
+  map.addSource('selected-roads', {
+    'type': 'geojson',
+    'data': null
+  });
+  SELECTED_ROADS_SOURCE = map.getSource('selected-roads')
+
   map.addLayer({
     'id': 'selected-roads',
     'type': 'line',
     'source': 'selected-roads',
-    'interactive': true,
     'paint': {
       'line-color': 'rgba(255,5,230,1)',
       'line-width': 3,
       'line-opacity': 0.6
     }
-  }, 'road-waterlogged');
+  });
 
   map.addSource('terrain-data', {
     type: 'vector',
@@ -160,7 +166,7 @@ function addSourcesAndLayers() {
     },
     'paint': {
       'line-color': '#ff69b4',
-      'line-opacity': '0.3',
+      'line-opacity': 0.3,
       'line-width': 1
     }
   });
@@ -174,26 +180,26 @@ function selectionHandler(data) {
   //Dump Data
   window.dump = JSON.stringify(data);
 
-  data.features.forEach(function(feature) {
+  data.features.forEach(function (feature) {
     addedRoads.push(feature.properties.id);
     addedFeatures.push(feature);
   });
 
   map.on('click', function (e) {
     if (map.getZoom() >= 15) {
-      map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: 'selected-roads'}, function (err, features) {
-        if (err) throw err;
+      let features;
+      features = map.queryRenderedFeatures(e.point, { layers: ['selected-roads'] })
+      console.log(features)
+      if (features.length) {
+        deleteRoad(data, addedRoads, addedFeatures, features);
+      } else {
+        let features;
+        features = map.queryRenderedFeatures(e.point, { layers: MAP_LAYERS['road'] });
         if (features.length) {
-          deleteRoad(data, addedRoads, addedFeatures, features);
-        } else {
-          map.featuresAt(e.point, {radius: 5, includeGeometry: true, layer: MAP_LAYERS['road']}, function (err, features) {
-            if (err) throw err;
-            if (features.length) {
-              addRoad(data, addedRoads, addedFeatures, features);
-            }
-          });
+          console.log(features)
+          addRoad(data, addedRoads, addedFeatures, features);
         }
-      });
+      }
     }
   });
 }
@@ -207,9 +213,9 @@ function loadInfo(err, features) {
     var popup = new mapboxgl.Popup();
 
     popup
-    .setLngLat(features[0].geometry.coordinates)
-    .setHTML(popupHTML)
-    .addTo(map);
+      .setLngLat(features[0].geometry.coordinates)
+      .setHTML(popupHTML)
+      .addTo(map);
   }
 }
 

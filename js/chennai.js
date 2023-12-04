@@ -1,5 +1,10 @@
 // Simple map
-var SELECTED_ROADS_SOURCE;
+let SELECTED_ROADS_SOURCE;
+
+let user = {
+  ip : null,
+  location : null
+}
 
 mapboxgl.accessToken = PUBLIC_ACCESS_TOKEN;
 var map = new mapboxgl.Map({
@@ -8,9 +13,36 @@ var map = new mapboxgl.Map({
   hash: true
 });
 
+// Find user details to add to contributed data
+fetch('https://cloudflare.com/cdn-cgi/trace')
+.then(resp => resp.text())
+.then(data => {
+
+userIpMatch = data.match(/ip=([\d.]+)/);
+userLocationMatch = data.match(/colo=([\d.]+)/);
+
+user.location = userLocationMatch ? userLocationMatch[1] : null;
+user.ip = userIpMatch ? userIpMatch[1] : null;
+
+})
+
 map.off('tile.error', map.onError);
+
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl());
+
+// Add geolocate control to the map.
+map.addControl(
+  new mapboxgl.GeolocateControl({
+  positionOptions: {
+  enableHighAccuracy: true
+  },
+  // When active the map will receive updates to the device's location as it changes.
+  trackUserLocation: true,
+  // Draw an arrow next to the location dot to indicate which direction the device is heading.
+  showUserHeading: true
+  })
+  );
 
 map.on('style.load', function (e) {
 
@@ -18,27 +50,6 @@ map.on('style.load', function (e) {
 
   getDataSet();
 
-  // map.on('click', function (e) {
-  //   map.featuresAt(e.point, {
-  //       radius: 10,
-  //       layer: LOAD_INFO_LAYERS,
-  //       includeGeometry: true
-  //   }, loadInfo);
-  // });
-
-  // Update map legend from styles
-  $('[data-map-layer]').each(function () {
-    // Get the color of the feature from the map
-    var obj = $(this).attr('data-map-layer');
-
-    try {
-      var color = map.getPaintProperty(obj, 'circle-color');
-      // Set the legend color
-      $(this).prepend('<div class="map-legend-circle" style="background:"' + array2rgb(color) + '></div>');
-    } catch (e) {
-      return;
-    }
-  });
 });
 
 function getDataSet(startID) {
@@ -105,6 +116,8 @@ function addRoad(data, addedRoads, addedFeatures, features) {
   };
   tempObj.properties['is_flooded'] = true;
   tempObj.properties['timestamp'] = Date.now();
+  tempObj.properties['ip'] = user.ip;
+  tempObj.properties['location'] = user.location;
   tempObj.id = md5(JSON.stringify(tempObj));
 
   var url = DATASETS_BASE + 'features/' + tempObj.id + '?access_token=' + DATASETS_ACCESS_TOKEN;
@@ -204,42 +217,9 @@ function selectionHandler(data) {
   });
 }
 
-function loadInfo(err, features) {
-  if (err) throw err;
-
-  if (features.length > 0) {
-    var popupHTML = '<h5>' + features[0].properties.Name + '</h5><p>' + $('[data-map-layer=' + features[0].layer.id + ']').html() + '</p>';
-
-    var popup = new mapboxgl.Popup();
-
-    popup
-      .setLngLat(features[0].geometry.coordinates)
-      .setHTML(popupHTML)
-      .addTo(map);
-  }
-}
-
 function updateFeatureCount(data) {
   $('#feature-count').toggleClass('loading');
   $('#feature-count').html(data.features.length);
   $('#feature-count').toggleClass('loading');
 }
 
-function array2rgb(color) {
-  // Combine and return the values
-  return 'rgba(' + color.map(function (x) {
-    return x * 255;
-  }).join() + ')';
-}
-
-$(function () {
-  $('#sidebar').mCustomScrollbar({
-    theme: 'rounded-dots',
-    scrollInertia: 100,
-    callbacks: {
-      onInit: function () {
-        $('#sidebar').css('overflow', 'auto');
-      }
-    }
-  });
-});

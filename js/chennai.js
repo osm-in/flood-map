@@ -59,8 +59,10 @@ function getDataSet(startID) {
     });
     features.features = data.features;
 
-    var lastFeatureID = data.features[data.features.length - 1].id;
-    getDataSet(lastFeatureID);
+    if (data.features.length > 0) {
+      var lastFeatureID = data.features[data.features.length - 1].id;
+      getDataSet(lastFeatureID);
+    }
 
     SELECTED_ROADS_SOURCE.setData(features);
 

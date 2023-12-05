@@ -1,32 +1,31 @@
 // Simple map
 let SELECTED_ROADS_SOURCE;
 
+// Trace and store anonymous user information
 let user = {
-  ip : null,
-  location : null
+  ip: null,
+  location: null
 }
+fetch('https://cloudflare.com/cdn-cgi/trace')
+  .then(resp => resp.text())
+  .then(data => {
+    userIpMatch = data.match(/ip=([\d.]+)/);
+    userLocationMatch = data.match(/colo=([A-Z]+)/);
 
+    user.location = userLocationMatch ? userLocationMatch[1] : null;
+    user.ip = userIpMatch ? userIpMatch[1] : null;
+  })
+
+
+// Map setup
 mapboxgl.accessToken = PUBLIC_ACCESS_TOKEN;
 var map = new mapboxgl.Map({
   container: 'map',
+  center: [80.2, 13.04],
+  zoom: 12,
   style: STYLESHEET,
   hash: true
 });
-
-// Find user details to add to contributed data
-fetch('https://cloudflare.com/cdn-cgi/trace')
-.then(resp => resp.text())
-.then(data => {
-
-userIpMatch = data.match(/ip=([\d.]+)/);
-userLocationMatch = data.match(/colo=([A-Z]+)/);
-
-
-user.location = userLocationMatch ? userLocationMatch[1] : null;
-user.ip = userIpMatch ? userIpMatch[1] : null;
-})
-
-map.off('tile.error', map.onError);
 
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl());
@@ -34,15 +33,15 @@ map.addControl(new mapboxgl.NavigationControl());
 // Add geolocate control to the map.
 map.addControl(
   new mapboxgl.GeolocateControl({
-  positionOptions: {
-  enableHighAccuracy: true
-  },
-  // When active the map will receive updates to the device's location as it changes.
-  trackUserLocation: true,
-  // Draw an arrow next to the location dot to indicate which direction the device is heading.
-  showUserHeading: true
+    positionOptions: {
+      enableHighAccuracy: true
+    },
+    // When active the map will receive updates to the device's location as it changes.
+    trackUserLocation: true,
+    // Draw an arrow next to the location dot to indicate which direction the device is heading.
+    showUserHeading: true
   })
-  );
+);
 
 map.on('style.load', function (e) {
 

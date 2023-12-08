@@ -1,5 +1,6 @@
 // Simple map
 let SELECTED_ROADS_SOURCE;
+let floodedStreetsGeoJSON;
 
 // Trace and store anonymous user information
 let user = {
@@ -46,43 +47,50 @@ map.addControl(
 map.on('style.load', function (e) {
 
   addSourcesAndLayers();
-
   getDataSet();
 
 });
 
-function getDataSet(startID) {
-  $('#feature-count').toggleClass('loading');
-  var url = DATASETS_BASE + 'features';
+async function getDataSet(url) {
 
-  var params = {
-    'access_token': DATASETS_ACCESS_TOKEN
+  const url = `${DATASETS_BASE}features`;
+  const params = {
+    access_token: DATASETS_ACCESS_TOKEN,
+    ...(startID && { start: startID }),
   };
 
-  if (startID) params.start = startID;
+  fetch(`${url}?${new URLSearchParams(params)}`)
+    .then(resp => console.log(resp.headers.get('Link')))
+    .then(resp => resp.json())
+    .then(data => {
 
-  $.get(url, params, function (data) {
-    var features = {
-      type: 'FeatureCollection'
-    };
-    data.features.forEach(function (feature) {
-      feature.properties.id = feature.id;
-    });
-    features.features = data.features;
+      $('#feature-count').toggleClass('loading');
 
-    if (data.features.length > 0) {
-      var lastFeatureID = data.features[data.features.length - 1].id;
-      getDataSet(lastFeatureID);
-    }
+      const features = {
+        type: 'FeatureCollection',
+        features: data.features.map(feature => {
+          feature.properties.id = feature.id;
+          return feature;
+        }),
+      };
 
-    SELECTED_ROADS_SOURCE.setData(features);
+      console.log(data.features.length);
 
-    updateFeatureCount(features);
+      if (data.features.length > 0) {
+        const lastFeatureID = data.features[data.features.length - 1].id;
+        getDataSet(lastFeatureID);
+      }
 
-    selectionHandler(features);
-  });
-  $('#feature-count').toggleClass('loading');
+      selectionHandler(features);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error)
+    })
+    .finally(
+      $('#feature-count').toggleClass('loading')
+    )
 }
+
 
 function deleteRoad(data, addedRoads, addedFeatures, features) {
   $('#map').toggleClass('loading');
@@ -177,9 +185,9 @@ function addSourcesAndLayers() {
       'line-cap': 'round'
     },
     'paint': {
-      'line-color': '#ff69b4',
-      'line-opacity': 0.3,
-      'line-width': 1
+      'line-color': 'grey',
+      'line-opacity': 0.1,
+      'line-width': 2
     }
   });
   $('#feature-count').toggleClass('loading');
@@ -188,6 +196,10 @@ function addSourcesAndLayers() {
 function selectionHandler(data) {
   var addedRoads = [];
   var addedFeatures = [];
+
+  SELECTED_ROADS_SOURCE.setData(data);
+
+  updateFeatureCount(data);
 
   //Dump Data
   window.dump = JSON.stringify(data);
@@ -212,6 +224,7 @@ function selectionHandler(data) {
       }
     }
   });
+
 }
 
 function updateFeatureCount(data) {
